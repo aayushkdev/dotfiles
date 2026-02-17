@@ -1,0 +1,21 @@
+## Required Packages
+- Hyprland (Duh)
+- hyprpaper
+- hypridle
+- hyprlock
+- hyprpolkitagent
+- Waybar
+- cliphist
+- grim
+- slurp
+- Kitty
+- fish
+- Yazi
+- Micro
+- Thunar
+- wlogout
+- wofi
+- zen-browser
+- nmtui
+- pavucontrol
+- blueman-manager
