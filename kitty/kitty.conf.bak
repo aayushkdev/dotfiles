@@ -1,0 +1,39 @@
+include Catppuccin-Macchiato.conf
+
+font_size 13.0
+
+window_margin_width     10
+single_window_margin_width 0
+background_image_layout scaled
+background_tint         0.97
+background_tint_gaps    -10.0
+
+window_border_width     1pt
+active_border_color     #44ffff
+
+enabled_layouts Tall, stack
+
+tab_bar_style       powerline
+
+touch_scroll_multiplier 8.0
+
+enable_audio_bell no
+
+
+
+map ctrl+alt+enter launch --cwd=current
+map kitty_mod+right next_window
+map kitty_mod+left previous_window
+#map ctrl+q quit
+
+map kitty_mod+] next_tab
+map kitty_mod+[ previous_tab
+
+
+# BEGIN_KITTY_FONTS
+font_family      family="JetBrainsMono Nerd Font"
+bold_font        auto
+italic_font      auto
+bold_italic_font auto
+# END_KITTY_FONTS
+emoji_font       Noto Color Emoji
