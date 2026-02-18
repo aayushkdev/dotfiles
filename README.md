@@ -16,6 +16,7 @@
 - wlogout
 - wofi
 - zen-browser
+- Networkmanager
 - nmtui
 - pavucontrol
 - blueman-manager

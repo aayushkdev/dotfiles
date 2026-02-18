@@ -1,0 +1,26 @@
+#!/bin/bash
+
+IFACE="$1"
+ACTION="$2"
+
+# ====== CONFIG ======
+USERNAME="uzernamez"
+PASSWORD="pazz"
+# ====================
+
+if [ "$ACTION" = "up" ]; then
+    SSID=$(nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -d: -f2)
+    if [[ "${SSID}" == *VIT* ]]; then
+        URL="http://phc.prontonetworks.com/cgi-bin/authlogin?URI=http://example.com"
+        STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$URL" \
+          -d "userId=$USERNAME" \
+          -d "password=$PASSWORD" \
+          -d "serviceName=ProntoAuthentication")
+
+        if [ "$STATUS" -eq 200 ]; then
+            logger "Captive portal login success (HTTP 200)"
+        else
+            logger "Captive portal login failed (HTTP $STATUS)"
+        fi
+    fi
+fi
