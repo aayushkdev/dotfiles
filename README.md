@@ -16,9 +16,12 @@
 - fish
 - Networkmanager
 - nmtui
+- nmsurf (yes)
 - pavucontrol
 - blueman-manager
 - bluez
+- brightnessctl
+- xdg-desktop-portal-hyprland
 - Yazi
 - Thunar
 - Micro
@@ -27,5 +30,6 @@
 - pipewire-pulse
 - wireplumber
 - ttf-jetbrains-mono-nerd
-- brightnessctl
-- xdg-desktop-portal-hyprland
+- noto-fonts 
+- noto-fonts-cjk 
+- noto-fonts-emoji
