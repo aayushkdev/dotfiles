@@ -1,0 +1,18 @@
+{
+  "theme": {
+    "mode": "preset",
+    "scheme": "dark",
+    "name": "tokyonight"
+  },
+  "nightLight": {
+    "enabled": false,
+    "intensity": 0.4455864138719512
+  },
+  "opacity": {
+    "background": 0.9
+  },
+  "wallpaper": {
+    "current": "/home/aayush/.config/wallpapers/themes/tokyonight/theme-tokyonight.jpg",
+    "dynamic": true
+  }
+}
