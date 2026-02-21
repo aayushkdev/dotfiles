@@ -1,0 +1,77 @@
+{
+  "name": "Everforest Light",
+  "variant": "light",
+  "darkPair": "everforest",
+  "palette": {
+    "background": "#F2EFDF",
+    "surface0": "#E6E0C9",
+    "surface1": "#D6CFB0",
+    "surface2": "#C6BE98",
+    "surface3": "#B5AD85",
+    "text": "#5C6A72",
+    "textReverse": "#F2EFDF",
+    "subtext": "#3C4841",
+    "subtextReverse": "#BEC5B2",
+    "accent": "#8DA101",
+    "success": "#8DA101",
+    "warning": "#DFA000",
+    "error": "#F85552",
+    "muted": "#7D8778",
+    "greyBlue": "#F8F5E4",
+    "blueDark": "#EDEADA"
+  },
+  "opacity": {
+    "background": 0.95
+  },
+  "neovim": {
+    "colorscheme": "everforest"
+  },
+  "hyprland": {
+    "activeBorder": "8DA101ff",
+    "inactiveBorder": "BEC5B2aa",
+    "shadowColor": "A6B0A0ee"
+  },
+  "terminal": {
+    "background": "#F2EFDF",
+    "foreground": "#5C6A72",
+
+    "selectionBackground": "#EDEADA",
+    "selectionForeground": "#3C4841",
+
+    "urlColor": "#35A77C",
+
+    "cursor": "#3C4841",
+    "cursorTextColor": "#F2EFDF",
+
+    "activeTabBackground": "#8DA101",
+    "activeTabForeground": "#F2EFDF",
+
+    "inactiveTabBackground": "#F8F5E4",
+    "inactiveTabForeground": "#7D8778",
+
+    "activeBorderColor": "#8DA101",
+    "inactiveBorderColor": "#F8F5E4",
+
+    "color0": "#F2EFDF",
+    "color1": "#F85552",
+    "color2": "#8DA101",
+    "color3": "#DFA000",
+    "color4": "#3A94C5",
+    "color5": "#DF69BA",
+    "color6": "#35A77C",
+    "color7": "#5C6A72",
+
+    "color8": "#BEC5B2",
+    "color9": "#F85552",
+    "color10": "#8DA101",
+    "color11": "#DFA000",
+    "color12": "#3A94C5",
+    "color13": "#DF69BA",
+    "color14": "#35A77C",
+    "color15": "#3C4841",
+
+    "color16": "#F57D26",
+    "color17": "#7D8778"
+  },
+  "wallpaper": "themes/everforest-light/theme-everforest-light.jpg"
+}

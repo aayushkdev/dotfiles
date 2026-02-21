@@ -1,0 +1,71 @@
+{
+  "name": "Synthwave 84",
+  "palette": {
+    "background": "#262335",
+    "surface0": "#2a2139",
+    "surface1": "#34294f",
+    "surface2": "#463465",
+    "surface3": "#495495",
+    "text": "#ffffff",
+    "textReverse": "#262335",
+    "subtext": "#b6b1b1",
+    "subtextReverse": "#2a2139",
+    "accent": "#ff7edb",
+    "success": "#72f1b8",
+    "warning": "#fede5d",
+    "error": "#fe4450",
+    "muted": "#444251",
+    "greyBlue": "#2a2139",
+    "blueDark": "#171520"
+  },
+  "opacity": {
+    "background": 0.9
+  },
+  "neovim": {
+    "colorscheme": "synthwave84"
+  },
+  "hyprland": {
+    "activeBorder": "ff7edbff",
+    "inactiveBorder": "444251aa",
+    "shadowColor": "171520ee"
+  },
+  "terminal": {
+    "background": "#262335",
+    "foreground": "#ffffff",
+    "selectionBackground": "#ffffff",
+    "selectionForeground": "#ffffff",
+    "urlColor": "#03edf9",
+    "cursor": "#03edf9",
+    "cursorTextColor": "#262335",
+
+    "activeTabBackground": "#ff7edb",
+    "activeTabForeground": "#171520",
+    "inactiveTabBackground": "#2a2139",
+    "inactiveTabForeground": "#444251",
+
+    "activeBorderColor": "#ff7edb",
+    "inactiveBorderColor": "#2a2139",
+
+    "color0": "#262335",
+    "color1": "#fe4450",
+    "color2": "#72f1b8",
+    "color3": "#fede5d",
+    "color4": "#03edf9",
+    "color5": "#ff7edb",
+    "color6": "#36f9f6",
+    "color7": "#ffffff",
+
+    "color8": "#444251",
+    "color9": "#fe4450",
+    "color10": "#72f1b8",
+    "color11": "#fede5d",
+    "color12": "#03edf9",
+    "color13": "#ff7edb",
+    "color14": "#36f9f6",
+    "color15": "#ffffff",
+
+    "color16": "#f97e72",
+    "color17": "#f3e70f"
+  },
+  "wallpaper": "themes/synthwave/theme-synthwave.jpg"
+}
