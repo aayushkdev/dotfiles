@@ -315,7 +315,7 @@ PanelWindow {
 
                                 Text {
                                     Layout.fillWidth: true
-                                    text: entry?.comment || entry?.genericName || provider?.name || ""
+                                    text: entry?.path || entry?.comment || entry?.genericName || provider?.name || ""
                                     color: Config.subtextColor
                                     font.family: Config.font
                                     font.pixelSize: Config.fontSizeSmall

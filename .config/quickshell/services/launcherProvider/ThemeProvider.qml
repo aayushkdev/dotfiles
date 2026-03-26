@@ -9,6 +9,8 @@ QtObject {
     readonly property string id: "themes"
     readonly property string name: "Themes"
     readonly property string prefix: "t"
+    readonly property bool showGlobally: true
+    readonly property bool showWhenPrefixEmpty: true
 
     function search(query) {
 

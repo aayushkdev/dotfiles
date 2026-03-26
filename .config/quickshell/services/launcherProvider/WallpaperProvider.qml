@@ -9,6 +9,8 @@ QtObject {
     readonly property string id: "wallpapers"
     readonly property string name: "Wallpapers"
     readonly property string prefix: "w"
+    readonly property bool showGlobally: true
+    readonly property bool showWhenPrefixEmpty: true
 
     // ============================================================
     // SEARCH

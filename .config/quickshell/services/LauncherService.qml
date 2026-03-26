@@ -17,34 +17,43 @@ Singleton {
     property bool visible: false
 
     function show() {
-        _refreshToken++
+
         query = ""
         selectedIndex = 0
         _activeProvider = null
+
         visible = true
+
+        _runSearch()
     }
 
     function hide() {
+
         visible = false
         query = ""
         selectedIndex = 0
         _activeProvider = null
+
+        _resultsCache = []
     }
 
     function toggle() {
         visible ? hide() : show()
     }
 
-    // Show specific provider (example: themes)
     function showProvider(providerId) {
 
         for (let p of providers) {
+
             if (p.id === providerId) {
+
                 _activeProvider = p
                 query = ""
                 selectedIndex = 0
+
                 visible = true
-                _refreshToken++
+
+                _runSearch()
                 return
             }
         }
@@ -60,9 +69,15 @@ Singleton {
     property int selectedIndex: 0
     property int maxItems: 50
 
-    property int _refreshToken: 0
-
     property var _activeProvider: null
+
+    // =====================================================================
+    // RESULTS CACHE (FIXES ASYNC ISSUE)
+    // =====================================================================
+
+    property var _resultsCache: []
+
+    readonly property var results: _resultsCache
 
     // =====================================================================
     // PROVIDERS REGISTRY
@@ -72,8 +87,8 @@ Singleton {
 
         AppsProvider,
         ThemeProvider,
-        WallpaperProvider
-
+        WallpaperProvider,
+        FileProvider
 
     ]
 
@@ -83,20 +98,18 @@ Singleton {
 
     function _parseQuery() {
 
-        let text = query.trim()
+        const text = query.trim()
 
         if (!text)
             return { provider: _activeProvider, query: "" }
 
-        let parts = text.split(/\s+/)
-
-        let prefix = parts[0].toLowerCase()
+        const parts = text.split(/\s+/)
+        const prefix = parts[0].toLowerCase()
 
         for (let p of providers) {
 
             if (p.prefix === prefix) {
 
-                // IMPORTANT: switch active provider
                 _activeProvider = p
 
                 return {
@@ -106,7 +119,6 @@ Singleton {
             }
         }
 
-        // no prefix → reset provider
         _activeProvider = null
 
         return {
@@ -116,46 +128,73 @@ Singleton {
     }
 
     // =====================================================================
-    // RESULTS
+    // CORE SEARCH FUNCTION (FIXED)
     // =====================================================================
 
-    readonly property var results: {
+    function _runSearch() {
 
-        void _refreshToken
+        const parsed = _parseQuery()
 
-        let parsed = _parseQuery()
+        const provider = parsed.provider
+        const q = parsed.query
 
-        let provider = parsed.provider
-        let q = parsed.query
+        let newResults = []
 
         if (provider) {
 
-            let res = provider.search(q) || []
-
-            return res.slice(0, maxItems).map(r => ({
-                provider: provider,
-                data: r
-            }))
-        }
-
-        // search all providers
-
-        let all = []
-
-        for (let p of providers) {
-
-            let res = p.search(q) || []
+            const res = provider.search(q) || []
 
             for (let r of res) {
 
-                all.push({
-                    provider: p,
+                newResults.push({
+                    provider: provider,
                     data: r
                 })
             }
+
+        } else {
+
+            for (let p of providers) {
+
+                if (!p.showGlobally)
+                    continue
+
+                if (!q && !p.showWhenPrefixEmpty)
+                    continue
+
+                const res = p.search(q) || []
+
+                for (let r of res) {
+
+                    newResults.push({
+                        provider: p,
+                        data: r
+                    })
+                }
+            }
         }
 
-        return all.slice(0, maxItems)
+        _resultsCache = newResults.slice(0, maxItems)
+
+        // clamp selection safely
+
+        if (selectedIndex >= _resultsCache.length)
+            selectedIndex = _resultsCache.length - 1
+
+        if (selectedIndex < 0)
+            selectedIndex = 0
+    }
+
+    // =====================================================================
+    // REFRESH CALLED BY PROVIDERS
+    // =====================================================================
+
+    function refresh() {
+
+        if (!visible)
+            return
+
+        _runSearch()
     }
 
     // =====================================================================
@@ -167,7 +206,7 @@ Singleton {
         if (selectedIndex < 0 || selectedIndex >= results.length)
             return
 
-        let item = results[selectedIndex]
+        const item = results[selectedIndex]
 
         if (!item)
             return
@@ -179,12 +218,11 @@ Singleton {
 
     function launch(entry) {
 
-        // backward compatibility
-
         if (!entry)
             return
 
         let cmd = entry.execString
+
         cmd = cmd.replace(/%[uUfFdDnNickvm]/g, "").trim()
         cmd = cmd.replace(/\s+/g, " ")
 
@@ -209,32 +247,21 @@ Singleton {
             selectedIndex++
     }
 
+    // =====================================================================
+    // QUERY CHANGE HANDLER
+    // =====================================================================
+
     onQueryChanged: {
 
         selectedIndex = 0
-        _refreshToken++
 
         const text = query.trim()
 
         if (!text) {
             _activeProvider = null
-            return
         }
 
-        const parts = text.split(/\s+/)
-        const prefix = parts[0].toLowerCase()
-
-        let found = false
-
-        for (let p of providers) {
-            if (p.prefix === prefix) {
-                found = true
-                break
-            }
-        }
-
-        if (!found)
-            _activeProvider = null
+        _runSearch()
     }
 
 }

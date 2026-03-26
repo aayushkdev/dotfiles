@@ -27,12 +27,13 @@ Singleton {
     readonly property string kittyThemePath: Quickshell.env("HOME") + "/.config/kitty/current-theme.conf"
     readonly property string nvimThemePath: Quickshell.env("HOME") + "/.config/nvim/current-theme.txt"
     readonly property string wallpaperDir: Quickshell.env("HOME") + "/.config/wallpapers"
+    readonly property string vscodeSettingsPath: Quickshell.env("HOME") + "/.config/Code/User/settings.json"
 
     // GTK/Qt paths
     readonly property string gtkColorsPath3: Quickshell.env("HOME") + "/.config/gtk-3.0/colors.css"
     readonly property string gtkColorsPath4: Quickshell.env("HOME") + "/.config/gtk-4.0/colors.css"
     readonly property string qtColorSchemePath: Quickshell.env("HOME") + "/.local/share/color-schemes/Lyne.colors"
-    readonly property string matugenConfigPath: Quickshell.env("HOME") + "/.lyne-dots/.data/matugen/config.toml"
+    readonly property string matugenConfigPath: Quickshell.env("HOME") + "/.config/matugen/config.toml"
     readonly property string matugenCachePath: Quickshell.env("HOME") + "/.cache/matugen"
 
     property string currentThemeName: getState("theme.name", "tokyonight")
@@ -42,6 +43,34 @@ Singleton {
     readonly property bool isDarkMode: colorScheme === "dark"
     readonly property string gtkThemeName: isDarkMode ? "adw-gtk3-dark" : "adw-gtk3"
     property var availableThemes: []
+
+    // Very hacky, need to switch to color pallete
+    property var vscodeThemeMap: ({
+        "tokyonight": "Tokyo Night",
+        "tokyonight-light": "Tokyo Night Light",
+
+        "everforest": "Everforest Pro Dark Vibrant",
+        "everforest-light": "Everforest Pro Light Cozy",
+
+        "catppuccin-mocha": "Catppuccin Mocha",
+        "catppuccin-latte": "Catppuccin Latte",
+
+        "gruvbox": "Gruvbox Dark Medium",
+        "gruvbox-light": "Gruvbox Light Medium",
+
+        "nord": "Nord",
+        "nord-light": "Tokyo Night Light",
+
+        "rose-pine": "Rosé Pine",
+        "rose-pine-dawn": "Rosé Pine Dawn",
+
+        "synthwave": "SynthWave '84",
+
+        "dracula": "Dracula Theme",
+
+        "material": "Monokai"
+
+    })
 
     // Themes filtered by current color scheme (dark shows dark, light shows light)
     readonly property var displayThemes: {
@@ -213,13 +242,16 @@ Singleton {
         // 5. Apply to Kitty
         _applyKitty(data.terminal);
 
-        // 6. Apply to Neovim
+        // 6. Apply to vs code
+        _applyVSCodeTheme(themeName)
+
+        // 7. Apply to Neovim
         _applyNeovim(data.neovim);
 
-        // 7. Apply theme wallpaper
+        // 8. Apply theme wallpaper
         _applyWallpaper(data.wallpaper);
 
-        // 8. Apply GTK/Qt colors from palette
+        // 9. Apply GTK/Qt colors from palette
         _applyGtkFromPalette(data.palette);
         _applyQtFromPalette(data.palette);
 
@@ -254,6 +286,26 @@ Singleton {
 
         kittyProc.command = ["bash", "-c", "cat > " + shellEscape(kittyThemePath) + " << 'THEME_EOF'\n" + content + "THEME_EOF\n" + "pkill -USR1 -x kitty 2>/dev/null; true"];
         kittyProc.running = true;
+    }
+
+    function _applyVSCodeTheme(themeName) {
+
+        var vscodeTheme = vscodeThemeMap[themeName]
+
+        if (!vscodeTheme)
+            return
+
+        vscodeProc.command = [
+            "bash", "-c",
+            "jq --arg theme " + shellEscape(vscodeTheme) +
+            " '.\"workbench.colorTheme\" = $theme' " +
+            shellEscape(vscodeSettingsPath) +
+            " > " + shellEscape(vscodeSettingsPath + ".tmp") +
+            " && mv " + shellEscape(vscodeSettingsPath + ".tmp") +
+            " " + shellEscape(vscodeSettingsPath)
+        ]
+
+        vscodeProc.running = true
     }
 
     function _applyNeovim(neovimConfig) {
@@ -631,6 +683,17 @@ Singleton {
         onExited: exitCode => {
             if (exitCode === 0)
                 console.log("[ThemeService] Neovim theme updated");
+        }
+    }
+
+    Process {
+        id: vscodeProc
+        stderr: SplitParser {
+            onRead: data => console.error("[ThemeService:VSCode] " + data)
+        }
+        onExited: exitCode => {
+            if (exitCode === 0)
+                console.log("[ThemeService] VS Code theme updated")
         }
     }
 

@@ -13,6 +13,9 @@ QtObject {
     // Prefix trigger
     property string prefix: ""
 
+    property bool showByDefault: true
+    property bool showWhenPrefixEmpty: true
+
     // Icon
     property string icon: ""
 

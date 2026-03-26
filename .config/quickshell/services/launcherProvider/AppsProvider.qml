@@ -10,6 +10,8 @@ QtObject {
     readonly property string id: "apps"
     readonly property string name: "Applications"
     readonly property string prefix: "a"
+    readonly property bool showGlobally: true
+    readonly property bool showWhenPrefixEmpty: true
 
     function search(query) {
 
