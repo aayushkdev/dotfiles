@@ -60,6 +60,9 @@ Singleton {
     // ========================================================================
     readonly property string font: getState("typography.font", "JetBrainsMono Nerd Font")
 
+    // Zen Browser profile path used for userChrome.css/theme injection.
+    readonly property string zenBrowserProfilePath: Quickshell.env("HOME") + "/.config/zen/mqqv2bt2.Default (release)"
+
 
     readonly property int fontSizeSmall: getState("typography.sizeSmall", 12)
     readonly property int fontSizeNormal: getState("typography.sizeNormal", 14)
