@@ -1,5 +1,7 @@
 {
   "name": "Everforest Dark",
+  "variant": "dark",
+  "lightPair": "everforest-light",
   "palette": {
   "background": "#272E33",
   "surface0": "#344046",

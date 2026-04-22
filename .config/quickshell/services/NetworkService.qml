@@ -32,6 +32,7 @@ Singleton {
     property string connectingSsid: ""
     readonly property bool scanning: rescanProc.running
     readonly property string systemIcon: {
+
         if (!wifiEnabled)
             return "󰤮";
 
@@ -68,6 +69,7 @@ Singleton {
 
     // Status text
     readonly property string statusText: {
+
         if (!wifiEnabled)
             return "Off";
 
@@ -160,7 +162,6 @@ Singleton {
         }
     }
 
-    // NMCLI monitor loop to detect connection/radio changes
     Process {
         id: monitorProc
         command: ["nmcli","monitor"]
@@ -189,7 +190,6 @@ Singleton {
         }
     }
 
-    // Periodically checks overall network connectivity state
     Process {
         id: connectivityProc
 
@@ -204,7 +204,6 @@ Singleton {
         }
     }
 
-    // Reads active device states and updates wifiConnected/activeConnection
     Process {
         id: activeConnectionProc
 

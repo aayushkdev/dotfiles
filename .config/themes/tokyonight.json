@@ -1,5 +1,7 @@
 {
   "name": "Tokyo Night",
+  "variant": "dark",
+  "lightPair": "tokyonight-light",
   "palette": {
     "background": "#1a1b26",
     "surface0": "#24283b",

@@ -41,7 +41,7 @@ Item {
         Text {
             id: titleText
 
-            text: root.windowTitle !== "" ? "    " + root.windowTitle : ""
+            text: root.windowTitle !== "" ? "   z" + root.windowTitle : ""
 
             color: Config.surface3Color
             font.family: Config.font

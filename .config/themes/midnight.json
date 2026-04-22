@@ -1,0 +1,88 @@
+{
+  "name": "Midnight",
+  "variant": "dark",
+  "lightPair": "tokyonight-light",
+
+  "palette": {
+    "background": "#000000",
+
+    "surface0": "#000000",
+    "surface1": "#000000",
+    "surface2": "#050505",
+    "surface3": "#0a0a0a",
+
+    "text": "#cfd3ff",
+    "textReverse": "#000000",
+
+    "subtext": "#7f85a3",
+    "subtextReverse": "#0a0a0a",
+
+    "accent": "#4f6fbf",
+    "success": "#7ee787",
+    "warning": "#e3b341",
+    "error": "#ff6b6b",
+
+    "muted": "#1a1a1a",
+    "greyBlue": "#0a0f1a",
+    "blueDark": "#000000"
+  },
+
+  "opacity": {
+    "background": 1.0
+  },
+
+  "neovim": {
+    "colorscheme": "default"
+  },
+
+  "hyprland": {
+    "activeBorder": "2a2f3aff",
+    "inactiveBorder": "00000000",
+    "shadowColor": "000000ff"
+  },
+
+  "terminal": {
+    "background": "#000000",
+    "foreground": "#e6e9ff",
+
+    "selectionBackground": "#111122",
+    "selectionForeground": "#ffffff",
+
+    "urlColor": "#8be9fd",
+
+    "cursor": "#eaeaea",
+    "cursorTextColor": "#000000",
+
+    "activeTabBackground": "#6f9cff",
+    "activeTabForeground": "#000000",
+
+    "inactiveTabBackground": "#000000",
+    "inactiveTabForeground": "#666a80",
+
+    "activeBorderColor": "#6f9cff",
+    "inactiveBorderColor": "#000000",
+
+    "color0": "#000000",
+    "color1": "#ff6b6b",
+    "color2": "#7ee787",
+    "color3": "#e3b341",
+    "color4": "#4f6fbf",
+    "color5": "#d2a8ff",
+    "color6": "#6fcfe0",
+    "color7": "#c9d1d9",
+
+    "color8": "#3a3f55",
+    "color9": "#ff7b72",
+    "color10": "#7ee787",
+    "color11": "#ffd866",
+    "color12": "#5f7fd1",
+    "color13": "#e2b6ff",
+    "color14": "#8adbe6",
+    "color15": "#eaeaea",
+
+    "color16": "#ff9e64",
+    "color17": "#b62324"
+  },
+
+  "wallpaper": "themes/midnight/theme-midnight.jpg"
+}

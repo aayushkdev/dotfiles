@@ -60,6 +60,7 @@ Singleton {
     // ========================================================================
     readonly property string font: getState("typography.font", "JetBrainsMono Nerd Font")
 
+
     readonly property int fontSizeSmall: getState("typography.sizeSmall", 12)
     readonly property int fontSizeNormal: getState("typography.sizeNormal", 14)
     readonly property int fontSizeLarge: getState("typography.sizeLarge", 16)

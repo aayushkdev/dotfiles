@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import Quickshell
+import Quickshell.Io
 import Quickshell.Services.UPower
 
 Singleton {
@@ -18,7 +19,7 @@ Singleton {
     readonly property int state: mainBattery ? mainBattery.state : UPowerDeviceState.Unknown
 
     // Boolean helper to simplify UI bindings
-    readonly property bool isCharging: state === UPowerDeviceState.Charging
+    readonly property bool isCharging: state === UPowerDeviceState.Charging || state === UPowerDeviceState.PendingCharge || state === UPowerDeviceState.Full
 
     // Holds the reference to the battery object
     property var mainBattery: null
@@ -36,8 +37,22 @@ Singleton {
             function checkDevice() {
                 if (modelData && modelData.isLaptopBattery) {
                     root.mainBattery = modelData
+                    root.checkBatteryNotifications()
                 }
             }
+        }
+    }
+
+    Connections {
+        target: root.mainBattery
+        enabled: root.mainBattery !== null
+
+        function onPercentageChanged() {
+            root.checkBatteryNotifications()
+        }
+
+        function onStateChanged() {
+            root.checkBatteryNotifications()
         }
     }
 
@@ -56,5 +71,80 @@ Singleton {
         if (p >= 30) return "󰁼"
         if (p >= 20) return "󰁻"
         return "󰁺"
+    }
+
+    readonly property int lowWarningLevel: 15
+    readonly property int criticalWarningLevel: 5
+    readonly property int hysteresis: 5
+    property int lastNotifiedLevel: 0
+
+    function notifyBattery(title, body, urgency) {
+        const escapedTitle = title.replace(/'/g, "'\\''");
+        const escapedBody = body.replace(/'/g, "'\\''");
+        const cmd = "if command -v notify-send >/dev/null 2>&1; then " +
+                    "notify-send -u '" + urgency + "' -i battery '" + escapedTitle + "' '" + escapedBody + "'; " +
+                    "else echo '[battery-notify:" + urgency + "] " + escapedTitle + " - " + escapedBody + "'; fi";
+
+        batteryNotifyProc.command = ["bash", "-c", cmd];
+        batteryNotifyProc.running = true;
+    }
+
+    function checkBatteryNotifications() {
+        if (!root.hasBattery)
+            return;
+
+        const p = root.percentage;
+        const isCharging = root.isCharging;
+
+        if (isCharging) {
+            if (root.lastNotifiedLevel !== 0 && p >= root.lowWarningLevel + root.hysteresis) {
+                root.lastNotifiedLevel = 0;
+            }
+            return;
+        }
+
+        if (p <= root.criticalWarningLevel) {
+            if (root.lastNotifiedLevel !== root.criticalWarningLevel) {
+                notifyBattery(
+                    "Battery critically low",
+                    "Battery at " + p + "% — plug in now!",
+                    "critical"
+                );
+                root.lastNotifiedLevel = root.criticalWarningLevel;
+            }
+        } else if (p <= root.lowWarningLevel) {
+            if (root.lastNotifiedLevel !== root.lowWarningLevel) {
+                notifyBattery(
+                    "Battery low",
+                    "Battery at " + p + "% — consider plugging in.",
+                    "normal"
+                );
+                root.lastNotifiedLevel = root.lowWarningLevel;
+            }
+        } else if (root.lastNotifiedLevel !== 0 && p >= root.lowWarningLevel + root.hysteresis) {
+            root.lastNotifiedLevel = 0;
+        }
+    }
+
+    Timer {
+        id: batteryNotifierTimer
+        interval: 60000
+        repeat: true
+        running: true
+        onTriggered: checkBatteryNotifications
+    }
+
+    Process {
+        id: batteryNotifyProc
+        onExited: function(exitCode, exitStatus) {
+            if (exitCode !== 0) {
+                console.warn("[BatteryService] battery notification failed:", exitCode, exitStatus);
+            }
+        }
+    }
+
+    Component.onCompleted: {
+        // trigger an immediate check on startup
+        checkBatteryNotifications();
     }
 }

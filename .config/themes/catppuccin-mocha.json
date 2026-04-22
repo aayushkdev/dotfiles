@@ -1,5 +1,7 @@
 {
   "name": "Catppuccin Mocha",
+  "variant": "dark",
+  "lightPair": "catppuccin-latte",
   "palette": {
     "background": "#1e1e2e",
     "surface0": "#313244",

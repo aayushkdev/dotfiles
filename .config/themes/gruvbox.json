@@ -1,5 +1,7 @@
 {
   "name": "Gruvbox Dark",
+  "variant": "dark",
+  "lightPair": "gruvbox-light",
   "palette": {
     "background": "#282828",
     "surface0": "#3c3836",
