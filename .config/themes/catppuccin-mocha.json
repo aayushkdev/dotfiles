@@ -26,6 +26,9 @@
   "neovim": {
     "colorscheme": "catppuccin"
   },
+  "vscode": {
+    "colorTheme": "Catppuccin Mocha"
+  },
   "hyprland": {
     "activeBorder": "89b4faff",
     "inactiveBorder": "585b70aa",

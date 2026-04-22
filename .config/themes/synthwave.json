@@ -24,6 +24,9 @@
   "neovim": {
     "colorscheme": "synthwave84"
   },
+  "vscode": {
+    "colorTheme": "SynthWave '84"
+  },
   "hyprland": {
     "activeBorder": "ff7edbff",
     "inactiveBorder": "444251aa",

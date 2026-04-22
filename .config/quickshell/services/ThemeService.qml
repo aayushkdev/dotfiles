@@ -44,34 +44,6 @@ Singleton {
     readonly property string gtkThemeName: isDarkMode ? "adw-gtk3-dark" : "adw-gtk3"
     property var availableThemes: []
 
-    // Very hacky, need to switch to color pallete
-    property var vscodeThemeMap: ({
-        "tokyonight": "Tokyo Night",
-        "tokyonight-light": "Tokyo Night Light",
-
-        "everforest": "Everforest Pro Dark Vibrant",
-        "everforest-light": "Everforest Pro Light Cozy",
-
-        "catppuccin-mocha": "Catppuccin Mocha",
-        "catppuccin-latte": "Catppuccin Latte",
-
-        "gruvbox": "Gruvbox Dark Medium",
-        "gruvbox-light": "Gruvbox Light Medium",
-
-        "nord": "Nord",
-        "nord-light": "Tokyo Night Light",
-
-        "rose-pine": "Rosé Pine",
-        "rose-pine-dawn": "Rosé Pine Dawn",
-
-        "synthwave": "SynthWave '84",
-
-        "dracula": "Dracula Theme",
-
-        "material": "Monokai"
-
-    })
-
     // Themes filtered by current color scheme (dark shows dark, light shows light)
     readonly property var displayThemes: {
         var result = [];
@@ -244,8 +216,8 @@ Singleton {
         // 5. Apply to Kitty
         _applyKitty(data.terminal);
 
-        // 6. Apply to vs code
-        _applyVSCodeTheme(themeName)
+        // 6. Apply to VS Code
+        _applyVSCodeTheme(data.vscode);
 
         // 7. Apply to Neovim
         _applyNeovim(data.neovim);
@@ -293,10 +265,11 @@ Singleton {
         kittyProc.running = true;
     }
 
-    function _applyVSCodeTheme(themeName) {
+    function _applyVSCodeTheme(vscodeConfig) {
+        if (!vscodeConfig)
+            return
 
-        var vscodeTheme = vscodeThemeMap[themeName]
-
+        var vscodeTheme = vscodeConfig.colorTheme || vscodeConfig.theme
         if (!vscodeTheme)
             return
 

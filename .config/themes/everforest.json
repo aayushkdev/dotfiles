@@ -26,6 +26,9 @@
   "neovim": {
     "colorscheme": "everforest"
   },
+  "vscode": {
+    "colorTheme": "Everforest Pro Dark Vibrant"
+  },
   "hyprland": {
     "activeBorder": "A7C080ff",
     "inactiveBorder": "555F66aa",

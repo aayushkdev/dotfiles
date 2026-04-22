@@ -26,6 +26,9 @@
   "neovim": {
     "colorscheme": "gruvbox"
   },
+  "vscode": {
+    "colorTheme": "Gruvbox Light Medium"
+  },
   "hyprland": {
     "activeBorder": "076678ff",
     "inactiveBorder": "bdae93aa",

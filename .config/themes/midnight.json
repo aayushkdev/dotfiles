@@ -34,6 +34,9 @@
   "neovim": {
     "colorscheme": "default"
   },
+  "vscode": {
+    "colorTheme": "Pitch Black"
+  },
 
   "hyprland": {
     "activeBorder": "2a2f3aff",

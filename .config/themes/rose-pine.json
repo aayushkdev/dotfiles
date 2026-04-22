@@ -26,6 +26,9 @@
   "neovim": {
     "colorscheme": "rose-pine"
   },
+  "vscode": {
+    "colorTheme": "Rosé Pine"
+  },
   "hyprland": {
     "activeBorder": "c4a7e7ff",
     "inactiveBorder": "524f67aa",

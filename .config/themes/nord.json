@@ -26,6 +26,9 @@
   "neovim": {
     "colorscheme": "nord"
   },
+  "vscode": {
+    "colorTheme": "Nord"
+  },
   "hyprland": {
     "activeBorder": "88c0d0ff",
     "inactiveBorder": "4c566aaa",

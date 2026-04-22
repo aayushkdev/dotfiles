@@ -26,6 +26,9 @@
   "neovim": {
     "colorscheme": "nord"
   },
+  "vscode": {
+    "colorTheme": "Tokyo Night Light"
+  },
   "hyprland": {
     "activeBorder": "5e81acff",
     "inactiveBorder": "c2c8d4aa",

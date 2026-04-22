@@ -24,6 +24,9 @@
   "neovim": {
     "colorscheme": "dracula"
   },
+  "vscode": {
+    "colorTheme": "Dracula Theme"
+  },
   "hyprland": {
     "activeBorder": "bd93f9ff",
     "inactiveBorder": "6272a4aa",

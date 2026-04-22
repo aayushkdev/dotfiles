@@ -26,6 +26,9 @@
   "neovim": {
     "colorscheme": "catppuccin-latte"
   },
+  "vscode": {
+    "colorTheme": "Catppuccin Latte"
+  },
   "hyprland": {
     "activeBorder": "1e66f5ff",
     "inactiveBorder": "acb0beaa",
