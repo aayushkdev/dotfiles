@@ -47,7 +47,7 @@ Singleton {
     // GEOMETRY & LAYOUT
     // ========================================================================
     readonly property int barHeight: getState("bar.height", 32)
-    readonly property bool barAutoHide: getState("bar.autoHide", true)
+    readonly property bool barAutoHide: getState("bar.autoHide", false)
 
     readonly property int radiusSmall: getState("geometry.radiusSmall", 5)
     readonly property int radius: getState("geometry.radius", 10)
@@ -77,6 +77,10 @@ Singleton {
     readonly property int animDurationShort: getState("animations.short", 100)
     readonly property int animDuration: getState("animations.normal", 200)
     readonly property int animDurationLong: getState("animations.long", 400)
+
+    // Popup/overlay entry+exit animation presets (used by AnimatedPopup.qml)
+    readonly property real animPopupFromScale: 0.92
+    readonly property int animPopupEasing: Easing.OutExpo
 
     readonly property bool screenshotAnimations: getState("animations.screenshot", true)
 

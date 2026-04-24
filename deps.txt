@@ -17,7 +17,7 @@ xdg-utils
 
 quickshell
 hyprpanel
-swww
+awww
 satty
 matugen
 python-pywal16
