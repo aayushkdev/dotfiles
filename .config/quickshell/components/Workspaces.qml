@@ -33,13 +33,21 @@ Item {
 
     // --- Special Workspace Detection ---
     property string manualSpecialName: ""
-    readonly property bool isSpecialWorkspace: manualSpecialName !== ""
+    readonly property string activeWorkspaceName: activeWorkspace?.name ?? ""
 
-    readonly property string specialWorkspaceName: {
-        if (!isSpecialWorkspace)
+    function normalizeSpecialWorkspaceName(name) {
+        if (!name)
             return "";
-        return manualSpecialName.startsWith("special:") ? manualSpecialName.substring(8) : manualSpecialName;
+        return name.startsWith("special:") ? name.substring(8) : name;
     }
+
+    // Prefer Hyprland's current workspace state and only fall back to raw events.
+    readonly property string specialWorkspaceName: {
+        if (activeWorkspaceName.startsWith("special:"))
+            return normalizeSpecialWorkspaceName(activeWorkspaceName);
+        return normalizeSpecialWorkspaceName(manualSpecialName);
+    }
+    readonly property bool isSpecialWorkspace: specialWorkspaceName !== ""
 
     // --- Normal Workspace Math ---
     property int activeId: (activeWorkspace && activeWorkspace.id > 0) ? activeWorkspace.id : 1
@@ -149,7 +157,8 @@ Item {
                 }
             }
             if (event.name === "workspace") {
-                root.manualSpecialName = "";
+                if (!root.activeWorkspaceName.startsWith("special:"))
+                    root.manualSpecialName = "";
                 occupiedUpdateTimer.restart();
             }
             const refreshEvents = ["createworkspace", "destroyworkspace", "movewindow", "openwindow", "closewindow"];
