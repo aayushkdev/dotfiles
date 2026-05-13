@@ -239,16 +239,24 @@ Singleton {
         if (!hyprColors)
             return;
 
-        const cmds = [];
-        if (hyprColors.activeBorder)
-            cmds.push("hyprctl keyword general:col.active_border 'rgba(" + hyprColors.activeBorder + ")'");
-        if (hyprColors.inactiveBorder)
-            cmds.push("hyprctl keyword general:col.inactive_border 'rgba(" + hyprColors.inactiveBorder + ")'");
-        if (hyprColors.shadowColor)
-            cmds.push("hyprctl keyword decoration:shadow:color 'rgba(" + hyprColors.shadowColor + ")'");
+        const generalConfig = [];
+        const decorationConfig = [];
 
-        if (cmds.length > 0) {
-            hyprProc.command = ["bash", "-c", cmds.join(" && ")];
+        if (hyprColors.activeBorder)
+            generalConfig.push('["col.active_border"] = ' + luaString("rgba(" + hyprColors.activeBorder + ")"));
+        if (hyprColors.inactiveBorder)
+            generalConfig.push('["col.inactive_border"] = ' + luaString("rgba(" + hyprColors.inactiveBorder + ")"));
+        if (hyprColors.shadowColor)
+            decorationConfig.push("shadow = { color = " + luaString("rgba(" + hyprColors.shadowColor + ")") + " }");
+
+        const sections = [];
+        if (generalConfig.length > 0)
+            sections.push("general = { " + generalConfig.join(", ") + " }");
+        if (decorationConfig.length > 0)
+            sections.push("decoration = { " + decorationConfig.join(", ") + " }");
+
+        if (sections.length > 0) {
+            hyprProc.command = ["hyprctl", "eval", "hl.config({ " + sections.join(", ") + " })"];
             hyprProc.running = true;
         }
     }
@@ -822,6 +830,10 @@ Singleton {
 
     function shellEscape(str) {
         return "'" + str.replace(/'/g, "'\\''") + "'";
+    }
+
+    function luaString(str) {
+        return "'" + str.replace(/\\/g, "\\\\").replace(/'/g, "\\'") + "'";
     }
 
     // ========================================================================

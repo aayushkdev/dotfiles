@@ -85,7 +85,7 @@ Scope {
 
     Process {
         id: hyprctlMonitors
-        command: ["hyprctl", "monitors", "-j"]
+        command: ["hyprctl", "-j", "monitors"]
         stdout: SplitParser {
             splitMarker: ""
             onRead: data => {
@@ -101,7 +101,7 @@ Scope {
 
     Process {
         id: hyprctlClients
-        command: ["hyprctl", "clients", "-j"]
+        command: ["hyprctl", "-j", "clients"]
         stdout: SplitParser {
             splitMarker: ""
             onRead: data => {

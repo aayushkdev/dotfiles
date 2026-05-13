@@ -95,6 +95,6 @@ Singleton {
 
     Process {
         id: logoutProc
-        command: ["bash", "-c", "hyprctl dispatch exit || loginctl terminate-user $USER"]
+        command: ["bash", "-c", "hyprctl dispatch 'hl.dsp.exit()' || loginctl terminate-user $USER"]
     }
 }

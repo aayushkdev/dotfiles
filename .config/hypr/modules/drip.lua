@@ -1,0 +1,65 @@
+hl.config({
+    general = {
+        gaps_in = 2,
+        gaps_out = 3,
+        border_size = 2,
+        col = {
+            active_border = "rgb(6272a4)",
+            inactive_border = "rgb(282a36)",
+        },
+        resize_on_border = true,
+        allow_tearing = true,
+        layout = "dwindle",
+    },
+
+    dwindle = {
+        smart_split = true,
+    },
+
+    decoration = {
+        rounding = 14,
+        rounding_power = 4,
+        active_opacity = 0.95,
+        inactive_opacity = 0.95,
+        border_part_of_window = false,
+        dim_special = 0.2,
+
+        shadow = {
+            enabled = false,
+            range = 30,
+            render_power = 20,
+            color = "rgba(09090940)",
+            offset = "0 0",
+        },
+
+        blur = {
+            enabled = true,
+            size = 4,
+            passes = 2,
+            vibrancy = 2,
+            vibrancy_darkness = 0.2,
+            popups = false,
+            special = false,
+            ignore_opacity = true,
+            new_optimizations = true,
+        },
+    },
+
+    ecosystem = {
+        no_update_news = true,
+    },
+})
+
+hl.layer_rule({
+    name = "modules",
+    match = { namespace = "qs_modules" },
+    blur = true,
+    ignore_alpha = 0.5,
+})
+
+hl.layer_rule({
+    name = "power",
+    match = { namespace = "qs_powerOverlay" },
+    blur = true,
+    no_anim = true,
+})
