@@ -10,6 +10,7 @@ hyprlock
 hyprpolkitagent
 hyprsession
 hyprsunset
+hyprland-preview-share-picker-git
 uwsm
 qt6-wayland
 xdg-desktop-portal-hyprland
@@ -49,6 +50,7 @@ zen-browser-bin
 code
 kwrite
 nmsurf
+slack-desktop
 
 eza
 ripgrep

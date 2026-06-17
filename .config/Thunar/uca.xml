@@ -12,4 +12,28 @@
 	<startup-notify/>
 	<directories/>
 </action>
+<action>
+	<icon>visual-studio-code</icon>
+	<name>Open Code Here</name>
+	<submenu></submenu>
+	<unique-id>1781686528212398-1</unique-id>
+	<command>code %f</command>
+	<description></description>
+	<range>*</range>
+	<patterns>*</patterns>
+	<startup-notify/>
+	<directories/>
+</action>
+<action>
+	<icon>system-file-manager</icon>
+	<name>Open Thunar Here</name>
+	<submenu></submenu>
+	<unique-id>1781686711137245-2</unique-id>
+	<command>thunar %d</command>
+	<description></description>
+	<range>*</range>
+	<patterns>*</patterns>
+	<startup-notify/>
+	<directories/>
+</action>
 </actions>
