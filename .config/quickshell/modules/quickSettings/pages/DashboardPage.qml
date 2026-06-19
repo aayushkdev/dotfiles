@@ -184,15 +184,20 @@ Item {
                 onOpenDetails: pageStack.currentIndex = 4
             }
 
-            // DND (Do Not Disturb)
+            // Audio
             QuickSettingsTile {
                 Layout.columnSpan: BluetoothService.adapter === null ? 2 : 1
-                icon: NotificationService.dndEnabled ? "󰂛" : "󰂚"
-                label: "Do not disturb"
-                subLabel: NotificationService.dndEnabled ? "Enabled" : "Disabled"
-                active: NotificationService.dndEnabled
-                hasDetails: false
-                onToggled: NotificationService.toggleDnd()
+                icon: AudioService.systemIcon
+                label: "Audio"
+                subLabel: AudioService.statusText
+                active: !AudioService.muted
+                hasDetails: true
+                onToggled: {
+                    AudioService.toggleMute();
+                }
+                onOpenDetails: {
+                    pageStack.currentIndex = 6;
+                }
             }
         }
 
@@ -205,8 +210,12 @@ Item {
             QsSlider {
                 icon: AudioService.systemIcon
                 value: AudioService.volume
-                onMoved: val => AudioService.setVolume(val)
-                onIconClicked: AudioService.toggleMute()
+                onMoved: val => {
+                    AudioService.setVolume(val);
+                }
+                onIconClicked: {
+                    AudioService.toggleMute();
+                }
             }
 
             // Brightness (only shows if available)

@@ -14,8 +14,28 @@ QsPopupWindow {
     anchorSide: "right"
     moduleName: "QuickSettings"
     contentImplicitHeight: pageStack.children[pageStack.currentIndex]?.implicitHeight ?? popupMaxHeight - 32
+    readonly property bool wifiPageOpen: visible && (pageStack.currentIndex === 1 || pageStack.currentIndex === 2)
+    readonly property bool audioPageOpen: visible && pageStack.currentIndex === 6
 
     onClosing: pageStack.currentIndex = 0
+
+    Binding {
+        target: NetworkService
+        property: "scanPollingEnabled"
+        value: root.wifiPageOpen
+    }
+
+    Binding {
+        target: BrightnessService
+        property: "pollingEnabled"
+        value: root.visible
+    }
+
+    Binding {
+        target: AudioService
+        property: "streamPollingEnabled"
+        value: root.audioPageOpen
+    }
 
     StackLayout {
         id: pageStack
@@ -71,6 +91,15 @@ QsPopupWindow {
         // ==========================
         ThemePage {
             onBackRequested: pageStack.currentIndex = 0
+        }
+
+        // ==========================
+        // PAGE 6: AUDIO
+        // ==========================
+        AudioPage {
+            onBackRequested: {
+                pageStack.currentIndex = 0;
+            }
         }
     }
 }

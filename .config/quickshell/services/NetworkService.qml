@@ -15,11 +15,6 @@ Singleton {
         activeConnectionProc.running = true; 
         connectivityProc.running = true;
         getSavedProc.running = true;
-
-        Qt.callLater(()=>{
-            getNetworksProc.running = true;
-        });
-
     }
 
     property var accessPoints: []
@@ -30,6 +25,7 @@ Singleton {
     property string connectivityState: "unknown"
     property string wifiInterface: ""
     property string connectingSsid: ""
+    property bool scanPollingEnabled: false
     readonly property bool scanning: rescanProc.running
     readonly property string systemIcon: {
 
@@ -77,7 +73,7 @@ Singleton {
             accessPoints.find(ap => ap.ssid === activeConnection);
 
         if (!activeNetwork)
-            return "On";
+            return activeConnection !== "" ? activeConnection : "On";
 
         if (connectivityState === "portal")
             return activeNetwork.ssid + " (Login required)";
@@ -102,6 +98,20 @@ Singleton {
             return;
 
         rescanProc.running = true;
+    }
+
+    function refreshAccessPoints() {
+        if (!root.scanPollingEnabled || !root.wifiEnabled)
+            return;
+
+        getSavedProc.running = true;
+        if (!rescanProc.running && !getNetworksProc.running)
+            rescanProc.running = true;
+    }
+
+    onScanPollingEnabledChanged: {
+        if (scanPollingEnabled)
+            refreshAccessPoints();
     }
 
     function disconnect() {
@@ -156,7 +166,8 @@ Singleton {
             // Reset state and update lists
             root.connectingSsid = "";
             getSavedProc.running = true;
-            getNetworksProc.running = true;
+            if (root.scanPollingEnabled)
+                getNetworksProc.running = true;
             connectivityProc.running = true;
             activeConnectionProc.running = true;
         }
@@ -177,9 +188,10 @@ Singleton {
                 if (data.includes("connected") ||
                     data.includes("disconnected"))
                 {
-                    getNetworksProc.running = true;
                     getSavedProc.running = true;
                     activeConnectionProc.running = true;
+                    if (root.scanPollingEnabled)
+                        getNetworksProc.running = true;
                 }
 
                 // Wifi radio changes
@@ -271,10 +283,8 @@ Singleton {
 
                 if (root.wifiEnabled) {
                     getSavedProc.running = true;
-                    Qt.callLater(() => {
-                        rescanProc.running = true;
-                        getNetworksProc.running = true;
-                    });
+                    if (root.scanPollingEnabled)
+                        Qt.callLater(root.refreshAccessPoints);
                 }
             }
         }
@@ -291,7 +301,8 @@ Singleton {
         id: rescanProc
         command: ["nmcli", "dev", "wifi", "list", "--rescan", "yes"]
         onExited: {
-            getNetworksProc.running = true;
+            if (root.scanPollingEnabled)
+                getNetworksProc.running = true;
             activeConnectionProc.running = true;
             connectivityProc.running = true;
         }
@@ -301,7 +312,8 @@ Singleton {
     Process {
         id: disconnectProc
         onExited:{
-            getNetworksProc.running = true;
+            if (root.scanPollingEnabled)
+                getNetworksProc.running = true;
             activeConnectionProc.running = true;
         }
     }
@@ -312,19 +324,17 @@ Singleton {
         // The command is defined dynamically before running
         onExited: {
             getSavedProc.running = true;
-            getNetworksProc.running = true;
+            if (root.scanPollingEnabled)
+                getNetworksProc.running = true;
         }
     }
 
     // Automatic Update Timer
     Timer {
         interval: 30000
-        running: root.wifiEnabled
+        running: root.wifiEnabled && root.scanPollingEnabled
         repeat: true
-        onTriggered: {
-            getSavedProc.running = true;
-            getNetworksProc.running = true;
-        }
+        onTriggered: root.refreshAccessPoints()
     }
 
     // List Saved Networks

@@ -26,6 +26,7 @@ Singleton {
     readonly property bool available: backlightDevice !== ""
     property string backlightDevice: ""
     readonly property int percentage: Math.round(brightness * 100)
+    property bool pollingEnabled: false
 
     readonly property string icon: {
         if (brightness <= 0.1)
@@ -60,7 +61,6 @@ Singleton {
 
     Component.onCompleted: {
         detectBacklight.running = true;
-        ensureHyprsunsetRunning.running = true;
     }
 
     // Connection with StateService to load persisted state
@@ -75,17 +75,8 @@ Singleton {
 
             console.log("[Brightness] Loaded state - enabled:", root.nightLightEnabled, "intensity:", root.nightLightIntensity);
 
-            // Always apply the loaded state (enable or disable)
-            applyStateTimer.restart();
-        }
-    }
-
-    Timer {
-        id: applyStateTimer
-        interval: 1000
-        onTriggered: {
             if (root.nightLightEnabled) {
-                root.applyNightLight();
+                ensureHyprsunsetRunning.running = true;
                 return;
             }
             root.disableNightLight();
@@ -155,9 +146,15 @@ Singleton {
 
     Timer {
         interval: 2000
-        running: root.available
+        running: root.available && root.pollingEnabled
         repeat: true
+        triggeredOnStart: true
         onTriggered: getCurrentBrightness.running = true
+    }
+
+    onPollingEnabledChanged: {
+        if (pollingEnabled && root.available)
+            getCurrentBrightness.running = true;
     }
 
     // ========================================================================
@@ -209,7 +206,7 @@ Singleton {
     function enableNightLight() {
         nightLightEnabled = true;
         setState("nightLight.enabled", true);
-        applyNightLight();
+        ensureHyprsunsetRunning.running = true;
     }
 
     function disableNightLight() {
