@@ -290,15 +290,16 @@ Singleton {
 
     Process {
         id: updateDisk
-        command: ["bash", "-c", "df -B1 / | awk 'NR==2{print $2,$3}'"]
+        command: ["bash", "-c", "df -B1 --output=size,used,pcent / | awk 'NR==2{gsub(/%/, \"\", $3); print $1,$2,$3}'"]
         stdout: SplitParser {
             onRead: data => {
                 const parts = data.trim().split(/\s+/);
-                if (parts.length >= 2) {
+                if (parts.length >= 3) {
                     const total = parseFloat(parts[0]);
                     const used = parseFloat(parts[1]);
+                    const usage = parseInt(parts[2]);
                     if (total > 0) {
-                        internal.diskUsage = Math.round((used / total) * 100);
+                        internal.diskUsage = isNaN(usage) ? Math.round((used / total) * 100) : usage;
                         internal.diskUsed = root._formatGiB(used);
                         internal.diskTotal = root._formatGiB(total);
                     }

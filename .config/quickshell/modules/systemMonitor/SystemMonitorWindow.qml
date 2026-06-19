@@ -14,8 +14,6 @@ QsPopupWindow {
     moduleName: "SystemMonitor"
     contentImplicitHeight: content.implicitHeight
 
-    readonly property bool hasGpu: SystemMonitorService.gpuType !== "unknown"
-
     // Color helpers
     function usageColor(usage: int): color {
         if (usage >= 90)
@@ -104,7 +102,7 @@ QsPopupWindow {
             color: Config.surface1Color
         }
 
-        // ==================== GAUGES (CPU + GPU) ====================
+        // ==================== GAUGES (CPU + RAM) ====================
         RowLayout {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter
@@ -113,19 +111,19 @@ QsPopupWindow {
             ArcGauge {
                 label: "CPU"
                 usage: SystemMonitorService.cpuUsage
-                temp: SystemMonitorService.cpuTemp
+                metaIcon: "󰔏"
+                metaText: SystemMonitorService.cpuTemp + "°C"
                 arcColor: root.usageColor(SystemMonitorService.cpuUsage)
                 badgeColor: root.tempColor(SystemMonitorService.cpuTemp)
             }
 
             ArcGauge {
-                visible: root.hasGpu
-                label: "GPU"
-                subtitle: SystemMonitorService.gpuType.toUpperCase()
-                usage: SystemMonitorService.gpuUsage
-                temp: SystemMonitorService.gpuTemp
-                arcColor: root.usageColor(SystemMonitorService.gpuUsage)
-                badgeColor: root.tempColor(SystemMonitorService.gpuTemp)
+                label: "RAM"
+                usage: SystemMonitorService.ramUsage
+                metaIcon: "󰘚"
+                metaText: SystemMonitorService.ramUsed + " GiB"
+                arcColor: root.usageColor(SystemMonitorService.ramUsage)
+                badgeColor: root.usageColor(SystemMonitorService.ramUsage)
             }
         }
 
@@ -136,22 +134,33 @@ QsPopupWindow {
             color: Config.surface1Color
         }
 
-        // ==================== RAM ====================
-        MetricBar {
-            icon: "󰘚"
-            label: "RAM"
-            usage: SystemMonitorService.ramUsage
-            detail: SystemMonitorService.ramUsed + " / " + SystemMonitorService.ramTotal + " GiB"
-            barColor: root.usageColor(SystemMonitorService.ramUsage)
-        }
-
         // ==================== DISK ====================
         MetricBar {
             icon: "󰋊"
             label: "Disk (/)"
             usage: SystemMonitorService.diskUsage
+            usageLabel: "used"
             detail: SystemMonitorService.diskUsed + " / " + SystemMonitorService.diskTotal + " GiB"
             barColor: root.usageColor(SystemMonitorService.diskUsage)
+        }
+
+        // ==================== BATTERY ====================
+        MetricBar {
+            visible: BatteryService.hasBattery
+            icon: BatteryService.getBatteryIcon()
+            label: "Battery"
+            usage: BatteryService.percentage
+            usageLabel: "charged"
+            detail: BatteryService.statusText + " · " + BatteryService.rateText
+            barColor: {
+                if (BatteryService.isCharging)
+                    return Config.successColor;
+                if (BatteryService.percentage < 20)
+                    return Config.errorColor;
+                if (BatteryService.percentage < 40)
+                    return Config.warningColor;
+                return Config.accentColor;
+            }
         }
 
         // ==================== SEPARATOR ====================
@@ -265,7 +274,8 @@ QsPopupWindow {
         required property string label
         property string subtitle: ""
         required property int usage
-        required property int temp
+        property string metaIcon: ""
+        property string metaText: ""
         required property color arcColor
         required property color badgeColor
 
@@ -382,7 +392,7 @@ QsPopupWindow {
                 spacing: 4
 
                 Text {
-                    text: "󰔏"
+                    text: gauge.metaIcon
                     font.family: Config.font
                     font.pixelSize: 12
                     color: gauge.badgeColor
@@ -396,7 +406,7 @@ QsPopupWindow {
 
                 Text {
                     id: tempText
-                    text: gauge.temp + "°C"
+                    text: gauge.metaText
                     font.family: Config.font
                     font.pixelSize: Config.fontSizeSmall
                     font.bold: true
@@ -421,10 +431,12 @@ QsPopupWindow {
         required property string icon
         required property string label
         required property int usage
+        property string usageLabel: "used"
         required property string detail
         required property color barColor
 
         Layout.fillWidth: true
+        Layout.preferredHeight: visible ? implicitHeight : 0
         spacing: 6
 
         property real animatedUsage: 0
@@ -494,7 +506,7 @@ QsPopupWindow {
         }
 
         Text {
-            text: metric.usage + "% used"
+            text: metric.usage + "% " + metric.usageLabel
             font.family: Config.font
             font.pixelSize: 11
             color: Config.subtextColor
