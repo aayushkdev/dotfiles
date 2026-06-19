@@ -10,7 +10,7 @@ Rectangle {
     id: root
 
     property bool dismissed: false
-    readonly property bool hasProgress: MprisService.positionSupported && MprisService.length > 0
+    readonly property bool hasProgress: MprisService.positionSupported && MprisService.lengthSupported && MprisService.length > 0
 
     function formatTime(seconds: real): string {
         const s = Math.floor(seconds);
@@ -19,7 +19,7 @@ Rectangle {
         return m + ":" + (sec < 10 ? "0" : "") + sec;
     }
 
-    visible: MprisService.hasPlayer && !dismissed
+    visible: MprisService.hasActiveMedia && !dismissed
 
     Connections {
         target: MprisService
@@ -308,7 +308,7 @@ Rectangle {
 
             // Current time
             Text {
-                text: root.formatTime(progressMouse.pressed ? progressBar.dragRatio * MprisService.length : MprisService.position)
+                text: root.formatTime(MprisService.position)
                 font.family: Config.font
                 font.pixelSize: 10
                 color: Config.subtextColor
@@ -320,10 +320,7 @@ Rectangle {
             Item {
                 id: progressBar
                 Layout.fillWidth: true
-                Layout.preferredHeight: progressMouse.containsMouse || progressMouse.pressed ? 6 : 4
-
-                property bool wasPlaying: false
-                property real dragRatio: 0
+                Layout.preferredHeight: 4
 
                 Behavior on Layout.preferredHeight {
                     NumberAnimation {
@@ -349,69 +346,15 @@ Rectangle {
                     radius: parent.height / 2
                     color: Config.accentColor
 
-                    property real liveRatio: MprisService.length > 0 ? MprisService.position / MprisService.length : 0
-                    property real currentRatio: progressMouse.pressed ? progressBar.dragRatio : liveRatio
+                    property real liveRatio: MprisService.length > 0 ? Math.max(0, Math.min(1, MprisService.position / MprisService.length)) : 0
 
-                    width: currentRatio * parent.width
+                    width: liveRatio * parent.width
 
                     Behavior on width {
-                        enabled: !progressMouse.pressed
                         NumberAnimation {
                             duration: 80
                             easing.type: Easing.OutQuad
                         }
-                    }
-                }
-
-                // Handle dot
-                Rectangle {
-                    width: progressMouse.containsMouse || progressMouse.pressed ? 10 : 6
-                    height: width
-                    radius: width / 2
-                    color: Config.accentColor
-                    y: (parent.height - height) / 2
-                    x: Math.max(0, progressFill.width - (width / 2))
-                    opacity: progressMouse.containsMouse || progressMouse.pressed ? 1.0 : 0.0
-
-                    Behavior on width {
-                        NumberAnimation {
-                            duration: Config.animDurationShort
-                            easing.type: Easing.OutQuad
-                        }
-                    }
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: Config.animDurationShort
-                        }
-                    }
-                }
-
-                MouseArea {
-                    id: progressMouse
-                    anchors.fill: parent
-                    anchors.topMargin: -6
-                    anchors.bottomMargin: -6
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-
-                    onPressed: mouse => {
-                        progressBar.dragRatio = Math.max(0, Math.min(1, mouse.x / width));
-                        progressBar.wasPlaying = MprisService.isPlaying;
-                        if (progressBar.wasPlaying)
-                            MprisService.activePlayer.pause();
-                    }
-
-                    onPositionChanged: mouse => {
-                        if (pressed)
-                            progressBar.dragRatio = Math.max(0, Math.min(1, mouse.x / width));
-                    }
-
-                    onReleased: mouse => {
-                        const ratio = Math.max(0, Math.min(1, mouse.x / width));
-                        MprisService.setPosition(ratio * MprisService.length);
-                        if (progressBar.wasPlaying)
-                            MprisService.activePlayer.play();
-                        progressBar.wasPlaying = false;
                     }
                 }
             }

@@ -21,14 +21,16 @@ Singleton {
     readonly property string identity: activePlayer?.identity ?? ""
 
     // --- PLAYBACK STATE ---
+    readonly property var playbackState: activePlayer?.playbackState ?? MprisPlaybackState.Stopped
     readonly property bool isPlaying: activePlayer?.isPlaying ?? false
     readonly property bool anyPlaying: players.some(p => p.isPlaying)
+    readonly property bool hasActiveMedia: hasPlayer && playbackState !== MprisPlaybackState.Stopped
 
     // --- POSITION ---
     readonly property real position: activePlayer?.position ?? 0
     readonly property real length: activePlayer?.length ?? 0
     readonly property bool positionSupported: activePlayer?.positionSupported ?? false
-    readonly property bool canSeek: activePlayer?.canSeek ?? false
+    readonly property bool lengthSupported: activePlayer?.lengthSupported ?? false
 
     // --- CAPABILITIES ---
     readonly property bool canNext: activePlayer?.canGoNext ?? false
@@ -46,13 +48,14 @@ Singleton {
 
     // --- POSITION TRACKING ---
     Timer {
-        running: root.hasPlayer && root.isPlaying && root.positionSupported
-        interval: 500
+        running: root.hasPlayer && root.isPlaying
+        interval: 1000
         repeat: true
         triggeredOnStart: true
         onTriggered: {
-            if (root.activePlayer && Mpris.players.values.includes(root.activePlayer))
+            if (root.activePlayer && Mpris.players.values.includes(root.activePlayer)) {
                 root.activePlayer.positionChanged();
+            }
         }
     }
 
@@ -115,16 +118,6 @@ Singleton {
     function previous() {
         if (activePlayer?.canGoPrevious)
             activePlayer.previous();
-    }
-
-    function setPosition(pos: real) {
-        if (activePlayer?.canSeek)
-            activePlayer.position = pos;
-    }
-
-    function restart() {
-        if (activePlayer?.canSeek)
-            activePlayer.position = 0;
     }
 
     function cycleLoop() {
