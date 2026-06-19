@@ -267,7 +267,7 @@ PanelWindow {
                                 action: "Power Menu"
                             },
                             {
-                                keys: "Print",
+                                keys: "XF86SelectiveScreenshot / Print",
                                 action: "Screenshot"
                             },
                             {

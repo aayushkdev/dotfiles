@@ -64,6 +64,7 @@ hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = tr
 hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true })
 
+hl.bind("XF86SelectiveScreenshot", hl.dsp.global("quickshell:take_screenshot"))
 hl.bind("Print", hl.dsp.global("quickshell:take_screenshot"))
 hl.bind("XF86PowerOff", hl.dsp.global("quickshell:power_menu"), { locked = true })
 hl.bind("XF86PowerDown", hl.dsp.global("quickshell:power_menu"), { locked = true })
