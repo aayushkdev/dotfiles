@@ -17,15 +17,6 @@ Singleton {
     readonly property string cpuIcon: "󰻠"
 
     // ========================================================================
-    // GPU PROPERTIES
-    // ========================================================================
-
-    readonly property int gpuUsage: internal.gpuUsage
-    readonly property int gpuTemp: internal.gpuTemp
-    readonly property string gpuIcon: "󰢮"
-    readonly property string gpuType: internal.gpuType // "nvidia", "amd", "intel", "unknown"
-
-    // ========================================================================
     // RAM PROPERTIES
     // ========================================================================
 
@@ -53,6 +44,7 @@ Singleton {
     // ========================================================================
 
     readonly property string uptime: internal.uptime // e.g. "2d 5h" or "3h 12m"
+    property bool detailedPollingEnabled: false
 
     // ========================================================================
     // INTERNAL STATE
@@ -64,11 +56,6 @@ Singleton {
         // CPU
         property int cpuUsage: 0
         property int cpuTemp: 0
-
-        // GPU
-        property int gpuUsage: 0
-        property int gpuTemp: 0
-        property string gpuType: "unknown"
 
         // CPU calculation state
         property real prevTotal: 0
@@ -99,13 +86,8 @@ Singleton {
     // ========================================================================
 
     Component.onCompleted: {
-        detectGpu.running = true;
         updateCpuUsage.running = true;
-        updateCpuTemp.running = true;
         updateRam.running = true;
-        updateDisk.running = true;
-        updateNetwork.running = true;
-        updateUptime.running = true;
     }
 
     // ========================================================================
@@ -118,27 +100,23 @@ Singleton {
         repeat: true
         onTriggered: {
             updateCpuUsage.running = true;
-            updateCpuTemp.running = true;
             updateRam.running = true;
-            updateNetwork.running = true;
-            updateUptime.running = true;
-
-            if (internal.gpuType === "nvidia") {
-                updateNvidiaGpu.running = true;
-            } else if (internal.gpuType === "amd") {
-                updateAmdGpuUsage.running = true;
-                updateAmdGpuTemp.running = true;
-            } else if (internal.gpuType === "intel") {
-                updateIntelGpuTemp.running = true;
-            }
         }
+    }
+
+    Timer {
+        interval: 2000
+        running: root.detailedPollingEnabled
+        repeat: true
+        onTriggered: root.updateDetails()
     }
 
     // Disk updates less frequently (every 30s)
     Timer {
         interval: 30000
-        running: true
+        running: root.detailedPollingEnabled
         repeat: true
+        triggeredOnStart: true
         onTriggered: updateDisk.running = true
     }
 
@@ -161,39 +139,15 @@ Singleton {
         return (bytes / 1073741824).toFixed(1);
     }
 
-    // ========================================================================
-    // GPU DETECTION
-    // ========================================================================
+    function updateDetails() {
+        updateCpuTemp.running = true;
+        updateNetwork.running = true;
+        updateUptime.running = true;
+    }
 
-    Process {
-        id: detectGpu
-        command: ["bash", "-c", `
-            if command -v nvidia-smi &>/dev/null && nvidia-smi &>/dev/null; then
-                echo "nvidia"
-            elif [ -f /sys/class/drm/card0/device/gpu_busy_percent ] || [ -f /sys/class/drm/card1/device/gpu_busy_percent ]; then
-                echo "amd"
-            elif [ -d /sys/class/drm/card0/gt ] || ls /sys/class/drm/card*/device/hwmon/hwmon*/temp1_input 2>/dev/null | head -1; then
-                echo "intel"
-            else
-                echo "unknown"
-            fi
-        `]
-        stdout: SplitParser {
-            onRead: data => {
-                const type = data.trim();
-                internal.gpuType = type;
-                console.log("[SystemMonitor] Detected GPU type:", type);
-
-                if (type === "nvidia") {
-                    updateNvidiaGpu.running = true;
-                } else if (type === "amd") {
-                    updateAmdGpuUsage.running = true;
-                    updateAmdGpuTemp.running = true;
-                } else if (type === "intel") {
-                    updateIntelGpuTemp.running = true;
-                }
-            }
-        }
+    onDetailedPollingEnabledChanged: {
+        if (detailedPollingEnabled)
+            updateDetails();
     }
 
     // ========================================================================
@@ -368,102 +322,6 @@ Singleton {
                     internal.uptime = hours + "h " + minutes + "m";
                 } else {
                     internal.uptime = minutes + "m";
-                }
-            }
-        }
-    }
-
-    // ========================================================================
-    // NVIDIA GPU MONITORING
-    // ========================================================================
-
-    Process {
-        id: updateNvidiaGpu
-        command: ["nvidia-smi", "--query-gpu=utilization.gpu,temperature.gpu", "--format=csv,noheader,nounits"]
-        stdout: SplitParser {
-            onRead: data => {
-                const parts = data.trim().split(",").map(s => s.trim());
-                if (parts.length >= 2) {
-                    const usage = parseInt(parts[0]);
-                    const temp = parseInt(parts[1]);
-
-                    if (!isNaN(usage)) internal.gpuUsage = usage;
-                    if (!isNaN(temp)) internal.gpuTemp = temp;
-                }
-            }
-        }
-    }
-
-    // ========================================================================
-    // AMD GPU MONITORING
-    // ========================================================================
-
-    Process {
-        id: updateAmdGpuUsage
-        command: ["bash", "-c", `
-            for card in /sys/class/drm/card*/device/gpu_busy_percent; do
-                if [ -f "$card" ]; then
-                    cat "$card" 2>/dev/null
-                    exit 0
-                fi
-            done
-            echo "0"
-        `]
-        stdout: SplitParser {
-            onRead: data => {
-                const usage = parseInt(data.trim());
-                if (!isNaN(usage)) {
-                    internal.gpuUsage = usage;
-                }
-            }
-        }
-    }
-
-    Process {
-        id: updateAmdGpuTemp
-        command: ["bash", "-c", `
-            for hwmon in /sys/class/drm/card*/device/hwmon/hwmon*/temp1_input; do
-                if [ -f "$hwmon" ]; then
-                    cat "$hwmon" 2>/dev/null
-                    exit 0
-                fi
-            done
-            cat /sys/class/drm/card0/device/hwmon/hwmon*/temp1_input 2>/dev/null || echo "0"
-        `]
-        stdout: SplitParser {
-            onRead: data => {
-                const temp = parseInt(data.trim());
-                if (!isNaN(temp)) {
-                    internal.gpuTemp = Math.round(temp / 1000);
-                }
-            }
-        }
-    }
-
-    // ========================================================================
-    // INTEL GPU MONITORING
-    // ========================================================================
-
-    Process {
-        id: updateIntelGpuTemp
-        command: ["bash", "-c", `
-            for zone in /sys/class/thermal/thermal_zone*/temp; do
-                type_file="\${zone%/temp}/type"
-                if [ -f "$type_file" ]; then
-                    type=$(cat "$type_file" 2>/dev/null)
-                    if [[ "$type" == *"gpu"* ]] || [[ "$type" == *"pch"* ]]; then
-                        cat "$zone" 2>/dev/null
-                        exit 0
-                    fi
-                fi
-            done
-            cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null || echo "0"
-        `]
-        stdout: SplitParser {
-            onRead: data => {
-                const temp = parseInt(data.trim());
-                if (!isNaN(temp)) {
-                    internal.gpuTemp = Math.round(temp / 1000);
                 }
             }
         }

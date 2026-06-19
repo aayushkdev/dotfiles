@@ -14,6 +14,12 @@ QsPopupWindow {
     moduleName: "SystemMonitor"
     contentImplicitHeight: content.implicitHeight
 
+    Binding {
+        target: SystemMonitorService
+        property: "detailedPollingEnabled"
+        value: root.visible
+    }
+
     // Color helpers
     function usageColor(usage: int): color {
         if (usage >= 90)
