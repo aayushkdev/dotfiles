@@ -136,6 +136,10 @@ Singleton {
         }
 
         function startLifecycle() {
+            if (persistent)
+                return;
+
+            totalTime = expireTimeout > 0 ? expireTimeout : Config.notifTimeout;
             remainingTime = totalTime;
             progress = 0.0;
             tickTimer.start();
@@ -189,6 +193,8 @@ Singleton {
         readonly property string image: notification ? (notification.image || "") : ""
         readonly property int urgency: notification ? notification.urgency : 0
         readonly property bool isUrgent: urgency === 2
+        readonly property int expireTimeout: notification ? notification.expireTimeout : -1
+        readonly property bool persistent: isUrgent || expireTimeout === 0
         readonly property var actions: notification ? (notification.actions || []) : []
         readonly property bool hasActions: actions && actions.length > 0
 

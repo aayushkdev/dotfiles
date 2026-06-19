@@ -93,8 +93,8 @@ Singleton {
         return "󰁺"
     }
 
-    readonly property int lowWarningLevel: 15
-    readonly property int criticalWarningLevel: 5
+    readonly property int lowWarningLevel: 20
+    readonly property int criticalWarningLevel: 10
     readonly property int hysteresis: 5
     property int lastNotifiedLevel: 0
 
@@ -102,7 +102,7 @@ Singleton {
         const escapedTitle = title.replace(/'/g, "'\\''");
         const escapedBody = body.replace(/'/g, "'\\''");
         const cmd = "if command -v notify-send >/dev/null 2>&1; then " +
-                    "notify-send -u '" + urgency + "' -i battery '" + escapedTitle + "' '" + escapedBody + "'; " +
+                    "notify-send -t 0 -u '" + urgency + "' -i battery '" + escapedTitle + "' '" + escapedBody + "'; " +
                     "else echo '[battery-notify:" + urgency + "] " + escapedTitle + " - " + escapedBody + "'; fi";
 
         batteryNotifyProc.command = ["bash", "-c", cmd];
@@ -144,14 +144,6 @@ Singleton {
         } else if (root.lastNotifiedLevel !== 0 && p >= root.lowWarningLevel + root.hysteresis) {
             root.lastNotifiedLevel = 0;
         }
-    }
-
-    Timer {
-        id: batteryNotifierTimer
-        interval: 60000
-        repeat: true
-        running: true
-        onTriggered: checkBatteryNotifications
     }
 
     Process {
