@@ -56,7 +56,8 @@ hl.bind("XF86MonBrightnessDown", hl.dsp.global("quickshell:brightness_down"), { 
 
 hl.bind("XF86AudioRaiseVolume", hl.dsp.global("quickshell:volume_up"), { locked = true, repeating = true })
 hl.bind("XF86AudioLowerVolume", hl.dsp.global("quickshell:volume_down"), { locked = true, repeating = true })
-hl.bind("XF86AudioMute", hl.dsp.global("quickshell:volume_mute"), { locked = true, repeating = true })
+hl.bind("XF86AudioMute", hl.dsp.global("quickshell:volume_mute"), { locked = true })
+hl.bind("XF86AudioMicMute", hl.dsp.global("quickshell:mic_mute"), { locked = true })
 
 hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { locked = true })
 hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
@@ -64,7 +65,8 @@ hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = tru
 hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true })
 
 hl.bind("Print", hl.dsp.global("quickshell:take_screenshot"))
-hl.bind("SUPER + End", hl.dsp.global("quickshell:power_menu"))
+hl.bind("XF86PowerOff", hl.dsp.global("quickshell:power_menu"), { locked = true })
+hl.bind("XF86PowerDown", hl.dsp.global("quickshell:power_menu"), { locked = true })
 hl.bind("SUPER + Space", hl.dsp.global("quickshell:app_launcher"))
 hl.bind("SUPER + V", hl.dsp.global("quickshell:clipboard_history"))
 hl.bind("SUPER + W", hl.dsp.global("quickshell:wallpaper_picker"))
