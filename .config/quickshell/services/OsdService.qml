@@ -12,7 +12,7 @@ Singleton {
     // ========================================================================
 
     property bool visible: false
-    property string type: "volume" // "volume", "brightness"
+    property string type: "volume" // "volume", "microphone", "brightness"
     property real value: 0
     property bool muted: false
 
@@ -32,6 +32,14 @@ Singleton {
 
     function showVolume(vol: real, isMuted: bool) {
         root.type = "volume";
+        root.value = vol;
+        root.muted = isMuted;
+        root.visible = true;
+        hideTimer.restart();
+    }
+
+    function showMicrophone(vol: real, isMuted: bool) {
+        root.type = "microphone";
         root.value = vol;
         root.muted = isMuted;
         root.visible = true;

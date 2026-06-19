@@ -17,12 +17,17 @@ Scope {
             "volume_medium": "󰖀",
             "volume_high": "󰕾",
             "mute": "󰝟",
+            "microphone": "󰍬",
+            "microphone_mute": "󰍭",
             "brightness_low": "󰃞",
             "brightness_medium": "󰃟",
             "brightness_high": "󰃠"
         })
 
     function getIcon(): string {
+        if (OsdService.type === "microphone") {
+            return OsdService.muted ? icons.microphone_mute : icons.microphone;
+        }
         if (OsdService.type === "mute" || OsdService.muted) {
             return icons.mute;
         }

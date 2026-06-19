@@ -180,8 +180,19 @@ ShellRoot {
         description: "Mute volume"
 
         onPressed: {
-            AudioService.toggleMute();
-            OsdService.showVolume(AudioService.volume, AudioService.muted);
+            const muted = AudioService.toggleMute();
+            OsdService.showVolume(AudioService.volume, muted);
+        }
+    }
+
+    // Shortcut: Microphone Mute
+    GlobalShortcut {
+        name: "mic_mute"
+        description: "Mute microphone"
+
+        onPressed: {
+            const muted = AudioService.toggleSourceMute();
+            OsdService.showMicrophone(AudioService.sourceVolume, muted);
         }
     }
 
