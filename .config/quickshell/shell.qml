@@ -7,7 +7,7 @@ import Quickshell.Hyprland
 import Quickshell.Wayland
 import qs.services
 import "./modules/bar/"
-import "./modules/screenshot/"
+import "./modules/capture/"
 
 ShellRoot {
     id: root
@@ -16,7 +16,8 @@ ShellRoot {
     // GLOBAL MODULE STATE
     // =========================================================================
 
-    property bool screenshotActive: false
+    property bool captureActive: false
+    property string captureType: "screenshot"
 
     // =========================================================================
     // BLUETOOTH AGENT
@@ -68,27 +69,27 @@ ShellRoot {
         }
     }
 
-    // Screenshot Manager
+    // Capture Manager
     Loader {
-        id: screenshotLoader
-        active: root.screenshotActive
-        source: "./modules/screenshot/ScreenshotManager.qml"
+        id: captureLoader
+        active: root.captureActive
+        source: "./modules/capture/CaptureManager.qml"
 
         onStatusChanged: {
             if (status === Loader.Ready) {
-                console.log("[Shell] ScreenshotManager loaded");
-                screenshotLoader.item.startCapture();
+                console.log("[Shell] CaptureManager loaded");
+                captureLoader.item.startCapture(root.captureType);
             }
         }
 
-        // Deactivate when screenshot finishes
+        // Deactivate when capture finishes
         Connections {
-            target: screenshotLoader.item
-            enabled: screenshotLoader.status === Loader.Ready
+            target: captureLoader.item
+            enabled: captureLoader.status === Loader.Ready
 
             function onActiveChanged() {
-                if (screenshotLoader.item && !screenshotLoader.item.active) {
-                    root.screenshotActive = false;
+                if (captureLoader.item && !captureLoader.item.active) {
+                    root.captureActive = false;
                 }
             }
         }
@@ -129,7 +130,9 @@ ShellRoot {
 
         onPressed: {
             console.log("[Shell] Screenshot requested");
-            root.screenshotActive = true;
+            root.captureType = "screenshot";
+            root.captureActive = false;
+            root.captureActive = true;
         }
     }
 

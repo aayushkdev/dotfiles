@@ -19,3 +19,4 @@ singleton IdleInhibitService IdleInhibitService.qml
 singleton WallpaperService WallpaperService.qml
 singleton ClipboardService ClipboardService.qml
 singleton ThemeService ThemeService.qml
+singleton RecordingService RecordingService.qml

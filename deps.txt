@@ -27,6 +27,7 @@ hyprpanel
 awww
 satty
 grim
+wf-recorder
 imagemagick
 matugen
 python-pywal16
