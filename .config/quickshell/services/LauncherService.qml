@@ -88,7 +88,8 @@ Singleton {
         AppsProvider,
         ThemeProvider,
         WallpaperProvider,
-        FileProvider
+        FileProvider,
+        CalculatorProvider
 
     ]
 
@@ -98,7 +99,8 @@ Singleton {
 
     function _parseQuery() {
 
-        const text = query.trim()
+        const rawText = query
+        const text = rawText.trim()
 
         if (!text)
             return { provider: _activeProvider, query: "" }
@@ -108,13 +110,17 @@ Singleton {
 
         for (let p of providers) {
 
-            if (p.prefix === prefix) {
+            const prefixLength = p.prefix.length
+            const matchesPrefix = rawText.toLowerCase().startsWith(p.prefix)
+            const hasSeparator = rawText.length > prefixLength && /\s/.test(rawText[prefixLength])
+
+            if (matchesPrefix && hasSeparator) {
 
                 _activeProvider = p
 
                 return {
                     provider: p,
-                    query: parts.slice(1).join(" ")
+                    query: rawText.slice(prefixLength).replace(/^\s+/, "")
                 }
             }
         }
