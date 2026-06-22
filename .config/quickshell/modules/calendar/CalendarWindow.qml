@@ -9,7 +9,7 @@ import "../../components/"
 QsPopupWindow {
     id: root
 
-    popupWidth: 300
+    popupWidth: 340
     popupMaxHeight: 500
     anchorSide: "center"
     moduleName: "Calendar"
@@ -18,11 +18,45 @@ QsPopupWindow {
     // Calendar state
     property int displayMonth: today.getMonth()
     property int displayYear: today.getFullYear()
+    property date selectedDate: today
     readonly property date today: TimeService.date
 
+    function sameDate(a, b) {
+        return a.getFullYear() === b.getFullYear()
+            && a.getMonth() === b.getMonth()
+            && a.getDate() === b.getDate();
+    }
+
+    function selectDate(date) {
+        selectedDate = date;
+        displayMonth = date.getMonth();
+        displayYear = date.getFullYear();
+    }
+
+    function daysBetween(a, b) {
+        const dayMs = 24 * 60 * 60 * 1000;
+        const startA = new Date(a.getFullYear(), a.getMonth(), a.getDate());
+        const startB = new Date(b.getFullYear(), b.getMonth(), b.getDate());
+        return Math.round((startA.getTime() - startB.getTime()) / dayMs);
+    }
+
+    function relativeDateText(date) {
+        const diff = daysBetween(date, today);
+
+        if (diff === 0)
+            return "Today";
+        if (diff === 1)
+            return "Tomorrow";
+        if (diff === -1)
+            return "Yesterday";
+        if (diff > 1)
+            return "In " + diff + " days";
+
+        return Math.abs(diff) + " days ago";
+    }
+
     function resetToToday() {
-        displayMonth = today.getMonth();
-        displayYear = today.getFullYear();
+        selectDate(today);
     }
 
     function previousMonth() {
@@ -51,7 +85,7 @@ QsPopupWindow {
     ColumnLayout {
         id: calendarContent
         anchors.fill: parent
-        spacing: 12
+        spacing: 10
 
         // ==================== HEADER ====================
         RowLayout {
@@ -73,21 +107,40 @@ QsPopupWindow {
                 }
             }
 
-            Text {
-                text: "Calendar"
-                font.family: Config.font
-                font.bold: true
-                font.pixelSize: Config.fontSizeLarge
-                color: Config.textColor
+            ColumnLayout {
                 Layout.fillWidth: true
+                spacing: 2
+
+                Text {
+                    text: "Calendar"
+                    font.family: Config.font
+                    font.bold: true
+                    font.pixelSize: Config.fontSizeLarge
+                    color: Config.textColor
+                    Layout.fillWidth: true
+                }
+
+                Text {
+                    text: TimeService.format("dddd, MMMM dd")
+                    font.family: Config.font
+                    font.pixelSize: Config.fontSizeSmall
+                    color: Config.subtextColor
+                    Layout.fillWidth: true
+                    elide: Text.ElideRight
+                }
             }
 
-            // Today badge
             Rectangle {
                 Layout.preferredHeight: 26
                 Layout.preferredWidth: todayBadgeContent.implicitWidth + 14
                 radius: Config.radius
-                color: Config.surface1Color
+                color: root.sameDate(root.selectedDate, root.today) ? Qt.alpha(Config.accentColor, 0.18) : Config.surface1Color
+
+                Behavior on color {
+                    ColorAnimation {
+                        duration: Config.animDuration
+                    }
+                }
 
                 RowLayout {
                     id: todayBadgeContent
@@ -98,15 +151,15 @@ QsPopupWindow {
                         text: "󰃶"
                         font.family: Config.font
                         font.pixelSize: Config.fontSizeSmall
-                        color: Config.subtextColor
+                        color: root.sameDate(root.selectedDate, root.today) ? Config.accentColor : Config.subtextColor
                     }
 
                     Text {
-                        text: TimeService.format("MMM dd")
+                        text: root.relativeDateText(root.selectedDate)
                         font.family: Config.font
                         font.pixelSize: Config.fontSizeSmall
                         font.bold: true
-                        color: Config.subtextColor
+                        color: root.sameDate(root.selectedDate, root.today) ? Config.accentColor : Config.subtextColor
                     }
                 }
             }
@@ -251,6 +304,7 @@ QsPopupWindow {
                     required property var model
 
                     readonly property bool isToday: model.today
+                    readonly property bool isSelected: root.sameDate(model.date, root.selectedDate)
                     readonly property bool isCurrentMonth: model.month === grid.month
                     readonly property bool isWeekend: {
                         const dow = model.date.getUTCDay();
@@ -265,7 +319,17 @@ QsPopupWindow {
                         width: Math.min(parent.width, parent.height)
                         height: width
                         radius: width / 2
-                        color: dayCell.isToday ? Config.accentColor : "transparent"
+                        color: {
+                            if (dayCell.isToday)
+                                return Config.accentColor;
+                            if (dayCell.isSelected)
+                                return Config.surface2Color;
+                            if (dayHover.hovered)
+                                return Config.surface1Color;
+                            return "transparent";
+                        }
+                        border.width: dayCell.isSelected && !dayCell.isToday ? 1 : 0
+                        border.color: Config.accentColor
 
                         Behavior on color {
                             ColorAnimation {
@@ -281,15 +345,26 @@ QsPopupWindow {
                         text: dayCell.model.day
                         font.family: Config.font
                         font.pixelSize: Config.fontSizeSmall
-                        font.bold: dayCell.isToday
+                        font.bold: dayCell.isToday || dayCell.isSelected
                         color: {
                             if (dayCell.isToday)
                                 return Config.textReverseColor;
+                            if (dayCell.isSelected)
+                                return Config.textColor;
                             if (dayCell.isWeekend)
                                 return Config.subtextColor;
                             return Config.textColor;
                         }
                         opacity: dayCell.isCurrentMonth ? 1.0 : 0.3
+                    }
+
+                    HoverHandler {
+                        id: dayHover
+                        cursorShape: Qt.PointingHandCursor
+                    }
+
+                    TapHandler {
+                        onTapped: root.selectDate(dayCell.model.date)
                     }
                 }
             }
