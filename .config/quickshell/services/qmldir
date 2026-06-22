@@ -15,6 +15,7 @@ singleton LauncherService LauncherService.qml
 singleton SystemMonitorService SystemMonitorService.qml
 singleton WindowManagerService WindowManagerService.qml
 singleton OsdService OsdService.qml
+singleton IdleInhibitService IdleInhibitService.qml
 singleton WallpaperService WallpaperService.qml
 singleton ClipboardService ClipboardService.qml
 singleton ThemeService ThemeService.qml

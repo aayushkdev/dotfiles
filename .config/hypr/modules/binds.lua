@@ -70,6 +70,7 @@ hl.bind("XF86SelectiveScreenshot", hl.dsp.global("quickshell:take_screenshot"))
 hl.bind("Print", hl.dsp.global("quickshell:take_screenshot"))
 hl.bind("XF86PowerOff", hl.dsp.global("quickshell:power_menu"), { locked = true })
 hl.bind("XF86PowerDown", hl.dsp.global("quickshell:power_menu"), { locked = true })
+hl.bind("XF86Favorites", hl.dsp.global("quickshell:idle_inhibit"), { locked = true })
 hl.bind("SUPER + Space", hl.dsp.global("quickshell:app_launcher"))
 hl.bind("SUPER + V", hl.dsp.global("quickshell:clipboard_history"))
 

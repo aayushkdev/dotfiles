@@ -233,4 +233,12 @@ ShellRoot {
 
         onPressed: ClipboardService.toggle()
     }
+
+    // Shortcut: Idle Inhibit
+    GlobalShortcut {
+        name: "idle_inhibit"
+        description: "Toggle idle inhibit"
+
+        onPressed: IdleInhibitService.toggle()
+    }
 }

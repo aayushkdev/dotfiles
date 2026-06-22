@@ -23,6 +23,8 @@ Scope {
         model: Quickshell.screens
 
         PanelWindow {
+            id: barWindow
+
             required property var modelData
 
             property bool enableAutoHide: Config.barAutoHide
@@ -49,6 +51,11 @@ Scope {
                     return 0
 
                 return (-1 * (height - 1))
+            }
+
+            IdleInhibitor {
+                enabled: IdleInhibitService.enabled
+                window: barWindow
             }
 
             Behavior on margins.top {

@@ -124,6 +124,34 @@ Item {
                 onClicked: pageStack.currentIndex = 5
             }
 
+            Rectangle {
+                Layout.preferredWidth: 36
+                Layout.preferredHeight: 36
+                radius: Config.radius
+                color: IdleInhibitService.enabled ? Config.accentColor : Config.surface1Color
+
+                Behavior on color {
+                    ColorAnimation {
+                        duration: Config.animDurationShort
+                    }
+                }
+
+                Text {
+                    anchors.centerIn: parent
+                    text: "󰅶"
+                    font.family: Config.font
+                    font.pixelSize: Config.fontSizeNormal
+                    color: IdleInhibitService.enabled ? Config.textReverseColor : Config.textColor
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: IdleInhibitService.toggle()
+                }
+            }
+
             // Power Menu
             ClearButton {
                 icon: "⏻"

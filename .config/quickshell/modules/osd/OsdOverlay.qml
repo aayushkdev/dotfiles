@@ -21,10 +21,15 @@ Scope {
             "microphone_mute": "󰍭",
             "brightness_low": "󰃞",
             "brightness_medium": "󰃟",
-            "brightness_high": "󰃠"
+            "brightness_high": "󰃠",
+            "idle_inhibit_on": "󰅶",
+            "idle_inhibit_off": "󰾪"
         })
 
     function getIcon(): string {
+        if (OsdService.type === "idleInhibit") {
+            return OsdService.value > 0 ? icons.idle_inhibit_on : icons.idle_inhibit_off;
+        }
         if (OsdService.type === "microphone") {
             return OsdService.muted ? icons.microphone_mute : icons.microphone;
         }
@@ -79,7 +84,7 @@ Scope {
 
             Rectangle {
                 id: content
-                width: 280
+                width: OsdService.type === "idleInhibit" ? 58 : 280
                 height: 50
                 radius: Config.radiusLarge
                 color: Config.backgroundTransparentColor
@@ -116,6 +121,7 @@ Scope {
                         font.family: Config.font
                         font.pixelSize: 22
                         color: OsdService.muted ? Config.mutedColor : Config.accentColor
+                        Layout.alignment: Qt.AlignVCenter
 
                         Behavior on color {
                             ColorAnimation {
@@ -126,6 +132,7 @@ Scope {
 
                     // Progress bar
                     Rectangle {
+                        visible: OsdService.type !== "idleInhibit"
                         Layout.fillWidth: true
                         Layout.preferredHeight: 6
                         radius: 3
@@ -157,6 +164,7 @@ Scope {
 
                     // Percentage
                     Text {
+                        visible: OsdService.type !== "idleInhibit"
                         text: Math.round(OsdService.value * 100) + "%"
                         font.family: Config.font
                         font.pixelSize: Config.fontSizeNormal

@@ -12,7 +12,7 @@ Singleton {
     // ========================================================================
 
     property bool visible: false
-    property string type: "volume" // "volume", "microphone", "brightness"
+    property string type: "volume" // "volume", "microphone", "brightness", "idleInhibit"
     property real value: 0
     property bool muted: false
 
@@ -50,6 +50,14 @@ Singleton {
         root.type = "brightness";
         root.value = brightness;
         root.muted = false;
+        root.visible = true;
+        hideTimer.restart();
+    }
+
+    function showIdleInhibit(enabled: bool) {
+        root.type = "idleInhibit";
+        root.value = enabled ? 1 : 0;
+        root.muted = !enabled;
         root.visible = true;
         hideTimer.restart();
     }
