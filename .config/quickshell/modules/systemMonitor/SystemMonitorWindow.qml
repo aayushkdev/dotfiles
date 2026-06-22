@@ -157,7 +157,7 @@ QsPopupWindow {
             label: "Battery"
             usage: BatteryService.percentage
             usageLabel: "charged"
-            detail: BatteryService.statusText + " · " + BatteryService.rateText
+            detail: BatteryService.rateText === "Idle" ? BatteryService.statusText : BatteryService.statusText + " · " + BatteryService.rateText
             barColor: {
                 if (BatteryService.isCharging)
                     return Config.successColor;

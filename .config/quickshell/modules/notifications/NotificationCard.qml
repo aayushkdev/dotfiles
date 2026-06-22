@@ -34,6 +34,7 @@ Item {
     readonly property string image: wrapper ? wrapper.image : ""
     readonly property int urgency: wrapper ? wrapper.urgency : 0
     readonly property bool isUrgent: wrapper ? wrapper.isUrgent : false
+    readonly property bool isPersistent: wrapper ? wrapper.persistent : false
     readonly property var actions: wrapper ? wrapper.actions : []
     readonly property bool hasActions: wrapper ? wrapper.hasActions : false
     readonly property bool showPopup: wrapper ? wrapper.popup : false
@@ -142,7 +143,7 @@ Item {
 
         // Progress bar (only in popup mode)
         Rectangle {
-            visible: root.popupMode
+            visible: root.popupMode && !root.isPersistent
             anchors.bottom: parent.bottom
             anchors.left: parent.left
             height: 3

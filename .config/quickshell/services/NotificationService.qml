@@ -155,10 +155,10 @@ Singleton {
                     console.log("[Notif] Paused:", notifId, "- Remaining:", remainingTime, "ms - Progress:", progress.toFixed(2));
                 }
             } else {
-                if (popup && remainingTime > 0 && !tickTimer.running) {
+                if (popup && !persistent && remainingTime > 0 && !tickTimer.running) {
                     tickTimer.start();
                     console.log("[Notif] Resumed:", notifId, "- Remaining:", remainingTime, "ms");
-                } else if (popup && remainingTime <= 0) {
+                } else if (popup && !persistent && remainingTime <= 0) {
                     popup = false;
                 }
             }
@@ -187,7 +187,7 @@ Singleton {
 
         readonly property int notifId: notification ? notification.id : -1
         readonly property string summary: notification ? (notification.summary || "") : ""
-        readonly property string body: notification ? (notification.body || "") : ""
+        readonly property string body: root.displayBody(notification)
         readonly property string appIcon: notification ? (notification.appIcon || "") : ""
         readonly property string appName: notification ? (notification.appName || "System") : "System"
         readonly property string image: notification ? (notification.image || "") : ""
@@ -217,6 +217,34 @@ Singleton {
     Component {
         id: notifComponent
         NotifWrapper {}
+    }
+
+    function isWhatsAppNotification(notification) {
+        if (!notification)
+            return false;
+
+        const haystack = [
+            notification.appName || "",
+            notification.appIcon || "",
+            notification.summary || "",
+            notification.body || ""
+        ].join(" ").toLowerCase();
+
+        return haystack.includes("whatsapp") || haystack.includes("web.whatsapp.com");
+    }
+
+    function displayBody(notification) {
+        if (!notification)
+            return "";
+
+        const body = notification.body || "";
+        if (!isWhatsAppNotification(notification))
+            return body;
+
+        // Some browser notifications prefix WhatsApp message text with "web.whatsapp.com".
+        return body
+            .replace(/^\s*(<a\b[^>]*>)?\s*(https?:\/\/)?web\.whatsapp\.com\/?\s*(<\/a>)?\s*(?:[~\-:|•·]\s*)?/i, "")
+            .trim();
     }
 
     // ========================================================================

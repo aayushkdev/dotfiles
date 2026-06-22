@@ -13,6 +13,7 @@ hyprsunset
 hyprland-preview-share-picker-git
 uwsm
 qt6-wayland
+qt6-5compat
 xdg-desktop-portal-hyprland
 xdg-dbus-proxy
 xdg-user-dirs
@@ -21,6 +22,7 @@ xorg-xrdb
 wl-clipboard
 
 quickshell
+upower
 hyprpanel
 awww
 satty
@@ -86,7 +88,8 @@ virtualbox
 noto-fonts
 noto-fonts-cjk
 noto-fonts-emoji
-otf-commit-mono-nerd
+ttf-jetbrains-mono-nerd
+ttf-cascadia-code-nerd
 ttf-hack-nerd
 
 networkmanager

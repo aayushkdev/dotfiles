@@ -19,12 +19,12 @@ Singleton {
     readonly property int state: mainBattery ? mainBattery.state : UPowerDeviceState.Unknown
 
     // Boolean helper to simplify UI bindings
-    readonly property bool isCharging: state === UPowerDeviceState.Charging || state === UPowerDeviceState.PendingCharge || state === UPowerDeviceState.Full
+    readonly property bool isCharging: (state === UPowerDeviceState.Charging || state === UPowerDeviceState.PendingCharge) && powerWatts > 0
     readonly property bool isDischarging: state === UPowerDeviceState.Discharging || state === UPowerDeviceState.PendingDischarge
     readonly property real powerWatts: mainBattery ? (mainBattery.changeRate ?? 0) : 0
     readonly property string rateText: {
         if (powerWatts <= 0)
-            return isCharging || isDischarging ? "-- W" : "Idle";
+            return "Idle";
         if (isCharging)
             return "+" + powerWatts.toFixed(1) + " W";
         if (isDischarging)
@@ -32,12 +32,12 @@ Singleton {
         return powerWatts.toFixed(1) + " W";
     }
     readonly property string statusText: {
-        if (state === UPowerDeviceState.Charging || state === UPowerDeviceState.PendingCharge)
+        if ((state === UPowerDeviceState.Charging || state === UPowerDeviceState.PendingCharge) && powerWatts > 0)
             return "Charging";
         if (state === UPowerDeviceState.Discharging || state === UPowerDeviceState.PendingDischarge)
             return "Discharging";
         if (state === UPowerDeviceState.Full)
-            return "Full";
+            return "Idle";
         return "Idle";
     }
 
