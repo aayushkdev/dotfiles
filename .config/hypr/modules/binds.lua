@@ -25,6 +25,8 @@ hl.bind("SUPER + SHIFT + Down", hl.dsp.window.move({ direction = "down" }))
 
 hl.bind("SUPER + S", hl.dsp.workspace.toggle_special("magic"))
 hl.bind("SUPER + SHIFT + S", hl.dsp.window.move({ workspace = "special:magic" }))
+hl.bind("SUPER + W", hl.dsp.workspace.toggle_special("whatsapp"))
+hl.bind("SUPER + SHIFT + W", hl.dsp.window.move({ workspace = "special:whatsapp" }))
 
 hl.bind("SUPER + Semicolon", hl.dsp.layout("splitratio -0.1"), { repeating = true })
 hl.bind("SUPER + Apostrophe", hl.dsp.layout("splitratio +0.1"), { repeating = true })
@@ -70,7 +72,6 @@ hl.bind("XF86PowerOff", hl.dsp.global("quickshell:power_menu"), { locked = true 
 hl.bind("XF86PowerDown", hl.dsp.global("quickshell:power_menu"), { locked = true })
 hl.bind("SUPER + Space", hl.dsp.global("quickshell:app_launcher"))
 hl.bind("SUPER + V", hl.dsp.global("quickshell:clipboard_history"))
-hl.bind("SUPER + W", hl.dsp.global("quickshell:wallpaper_picker"))
 
 hl.bind("SUPER + T", hl.dsp.exec_cmd("kitty"))
 hl.bind("SUPER + E", hl.dsp.exec_cmd("thunar"))

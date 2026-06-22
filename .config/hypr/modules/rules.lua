@@ -22,6 +22,20 @@ hl.window_rule({
     size = "600 400",
 })
 
+hl.window_rule({
+    name = "whatsapp-special",
+    match = { class = "chrome-web\\.whatsapp\\.com__-Default" },
+    workspace = "special:whatsapp silent",
+    no_initial_focus = true,
+})
+
+hl.window_rule({
+    name = "whatsapp-special-title",
+    match = { title = "web\\.whatsapp\\.com" },
+    workspace = "special:whatsapp silent",
+    no_initial_focus = true,
+})
+
 hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 0, gaps_in = 0 })
 hl.workspace_rule({ workspace = "f[1]", gaps_out = 0, gaps_in = 0 })
 

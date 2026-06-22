@@ -1,6 +1,6 @@
+require("modules/env")
 require("modules/autorun")
 require("modules/binds")
-require("modules/env")
 require("modules/drip")
 require("modules/input")
 require("modules/rules")
