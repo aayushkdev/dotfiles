@@ -1,0 +1,12 @@
+[Unit]
+Description=Pause/resume apps around suspend
+Before=sleep.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/fake-sleep pre
+ExecStop=%h/.local/bin/fake-sleep post
+RemainAfterExit=yes
+
+[Install]
+WantedBy=sleep.target

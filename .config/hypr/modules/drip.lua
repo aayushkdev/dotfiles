@@ -53,7 +53,7 @@ hl.config({
 hl.layer_rule({
     name = "modules",
     match = { namespace = "qs_modules" },
-    blur = true,
+    blur = false,
     ignore_alpha = 0.5,
 })
 

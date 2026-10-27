@@ -23,6 +23,14 @@ hl.window_rule({
 })
 
 hl.window_rule({
+    name = "float-satty",
+    match = { class = "com\\.gabm\\.satty" },
+    float = true,
+    center = true,
+    size = "900 650",
+})
+
+hl.window_rule({
     name = "whatsapp-special",
     match = { class = "chrome-web\\.whatsapp\\.com__-Default" },
     workspace = "special:whatsapp silent",

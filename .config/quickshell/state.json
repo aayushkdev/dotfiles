@@ -2,17 +2,17 @@
   "theme": {
     "mode": "preset",
     "scheme": "dark",
-    "name": "catppuccin-mocha"
+    "name": "midnight"
   },
   "nightLight": {
-    "enabled": false,
-    "intensity": 0.4455864138719512
+    "enabled": true,
+    "intensity": 0.6666666666666666
   },
   "opacity": {
-    "background": 0.9
+    "background": 1
   },
   "wallpaper": {
-    "current": "/home/aayush/.config/wallpapers/themes/catppuccin-mocha/theme-catppuccin-mocha.jpg",
+    "current": "/home/aayush/.config/wallpapers/themes/midnight/theme-midnight.jpg",
     "dynamic": true
   }
 }

@@ -138,7 +138,7 @@ Item {
 
     Timer {
         id: occupiedUpdateTimer
-        interval: 10
+        interval: 50
         onTriggered: root.updateOccupiedWorkspaces()
     }
 

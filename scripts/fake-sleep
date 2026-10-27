@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+APPS=(
+    chromium
+    slack
+    zen-bin
+    code
+    kitty
+    kitten
+)
+
+pause_apps() {
+    for app in "${APPS[@]}"; do
+        if pkill -STOP "$app" 2>/dev/null; then
+            echo "Paused $app"
+        fi
+    done
+}
+
+resume_apps() {
+    for app in "${APPS[@]}"; do
+        if pkill -CONT "$app" 2>/dev/null; then
+            echo "Resumed $app"
+        fi
+    done
+}
+
+disable_radios() {
+    nmcli radio wifi off || echo "Warning: could not disable Wi-Fi"
+    bluetoothctl power off || echo "Warning: could not disable Bluetooth"
+    echo "Radios disabled"
+}
+
+enable_radios() {
+    nmcli radio wifi on || echo "Warning: could not enable Wi-Fi"
+    bluetoothctl power on || echo "Warning: could not enable Bluetooth"
+    echo "Radios enabled"
+}
+
+status() {
+    echo "==== Status ===="
+
+    echo -n "Paused applications: "
+    found=false
+    for app in "${APPS[@]}"; do
+        if ps -C "$app" -o stat= 2>/dev/null | grep -q '^T'; then
+            printf "%s " "$app"
+            found=true
+        fi
+    done
+    $found || printf "None"
+    echo
+
+    echo "Wi-Fi: $(nmcli -t radio wifi)"
+    echo "Bluetooth: $(bluetoothctl show | awk '/Powered/ {print $2}')"
+}
+
+case "${1:-}" in
+    pre)
+        pause_apps
+        disable_radios
+        ;;
+    post|wake)
+        enable_radios
+        resume_apps
+        ;;
+    status)
+        status
+        ;;
+    *)
+        echo "Usage: fake-sleep [pre|post|status]"
+        exit 1
+        ;;
+esac

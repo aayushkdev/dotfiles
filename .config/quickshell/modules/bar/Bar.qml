@@ -114,6 +114,65 @@ Scope {
                     spacing: root.gapIn
 
                     Rectangle {
+                        visible: ScreenShareService.sharing
+                        Layout.preferredWidth: screenShareRow.implicitWidth + 14
+                        Layout.preferredHeight: 22
+                        radius: height / 2
+                        color: Qt.alpha(Config.accentColor, screenShareStopArea.containsMouse ? 0.28 : 0.18)
+                        border.width: 1
+                        border.color: Qt.alpha(Config.accentColor, 0.6)
+
+                        RowLayout {
+                            id: screenShareRow
+                            anchors.centerIn: parent
+                            spacing: 6
+
+                            Rectangle {
+                                Layout.preferredWidth: 8
+                                Layout.preferredHeight: 8
+                                radius: 4
+                                color: Config.accentColor
+
+                                SequentialAnimation on opacity {
+                                    running: ScreenShareService.sharing
+                                    loops: Animation.Infinite
+                                    NumberAnimation {
+                                        to: 0.35
+                                        duration: 700
+                                    }
+                                    NumberAnimation {
+                                        to: 1
+                                        duration: 700
+                                    }
+                                }
+                            }
+
+                            Text {
+                                text: ScreenShareService.statusText
+                                font.family: Config.font
+                                font.pixelSize: Config.fontSizeSmall
+                                font.bold: true
+                                color: Config.textColor
+                            }
+
+                            Text {
+                                text: "󰓛"
+                                font.family: Config.font
+                                font.pixelSize: Config.fontSizeSmall
+                                color: screenShareStopArea.containsMouse ? Config.accentColor : Config.subtextColor
+                            }
+                        }
+
+                        MouseArea {
+                            id: screenShareStopArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: ScreenShareService.stop()
+                        }
+                    }
+
+                    Rectangle {
                         visible: RecordingService.recording
                         Layout.preferredWidth: recordingRow.implicitWidth + 14
                         Layout.preferredHeight: 22
