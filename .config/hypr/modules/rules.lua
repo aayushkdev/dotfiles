@@ -15,14 +15,6 @@ hl.window_rule({
 })
 
 hl.window_rule({
-    name = "float-nm",
-    match = { title = "nmtui" },
-    float = true,
-    move = "(cursor_x-(window_w*0.5))-180 (cursor_y-(window_h*0.5))+220",
-    size = "600 400",
-})
-
-hl.window_rule({
     name = "float-satty",
     match = { class = "com\\.gabm\\.satty" },
     float = true,
@@ -78,3 +70,19 @@ hl.window_rule({
     center = true,
     size = "700 500",
 })
+
+hl.window_rule({
+    name = "noctalia-settings",
+    match = { class = "dev.noctalia.Noctalia" },
+    float = true,
+    size = { 1080, 920 },
+})
+
+for i, name in ipairs({ "1", "2", "3", "4", "5", "6", "7" }) do
+    hl.workspace_rule({
+        workspace = tostring(i),
+        monitor = "eDP-1",
+        persistent = true,
+        default_name = name,
+    })
+end

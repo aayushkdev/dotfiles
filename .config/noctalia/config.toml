@@ -1,0 +1,289 @@
+[accessibility]
+ui_scale = 1.1
+
+[audio]
+enable_overdrive = true
+
+[bar.default]
+center = [ "clock" ]
+concave_edge_corners = true
+end = [ "group:g1", "volume", "battery", "network", "notifications", "spacer_2", "session" ]
+margin_edge = 0
+margin_ends = 0
+radius_bottom_left = 12
+radius_bottom_right = 12
+radius_top_left = 0
+radius_top_right = 0
+scale = 1.0500000081956387
+start = [ "workspaces", "spacer_1", "active_window" ]
+thickness = 28
+
+    [bar.default.dead_zone.actions]
+    left = "annotate"
+
+    [[bar.default.capsule_group]]
+    accordion = false
+    accordion_direction = "end"
+    border = ""
+    border_width = 1.0
+    enabled = true
+    fill = "on_secondary"
+    id = "g1"
+    members = [ "temp", "sysmon_3" ]
+    opacity = 1.0
+    padding = 6.0
+
+[battery]
+warning_threshold = 20
+
+[calendar]
+
+[control_center.calendar]
+show_events_card = false
+
+[desktop_widgets]
+schema_version = 2
+widget_order = []
+
+    [desktop_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [desktop_widgets.widget]
+
+[location]
+auto_locate = true
+
+[lockscreen]
+transition = [ "zoom" ]
+transition_duration = 500
+
+[lockscreen_widgets]
+enabled = true
+schema_version = 2
+widget_order = [ "lockscreen-login-box@eDP-1" ]
+
+    [lockscreen_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
+    box_height = 70.0
+    box_width = 400.0
+    cx = 924.0
+    cy = 562.5
+    output = "eDP-1"
+    placement_height = 1125.0
+    placement_width = 1800.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = true
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "compact"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = false
+        show_media = true
+        show_password_reveal = true
+        show_session_buttons = true
+        show_unlock_hint = false
+        show_weather = true
+
+[nightlight]
+temperature_day = 6600
+
+[notification]
+history_retention_hours = 10
+scale = 1.0
+width = 360
+
+[osd]
+position = "bottom_center"
+
+    [osd.kinds]
+    media = false
+
+[shell]
+clipboard_image_action_command = "swash --stdin --name \"swash-$(date +'%Y-%m-%d_%H:%M:%S').png\""
+external_ip_enabled = true
+font_family = "JetBrainsMono Nerd Font"
+launch_apps_as_systemd_services = true
+panel_anchor_bar = "default"
+password_style = "random"
+polkit_agent = true
+settings_show_advanced = true
+show_close_buttons = false
+
+    [shell.greeter_sync]
+    auto_sync = false
+
+    [shell.launcher]
+    auto_paste = "off"
+    categories = false
+    category_icons_only = true
+    layout = "simple"
+    track_usage = false
+
+        [shell.launcher.providers.emoji]
+        global = false
+
+        [shell.launcher.providers.panels]
+        global = true
+
+        [shell.launcher.providers.session]
+        global = true
+
+        [shell.launcher.providers.wallpaper]
+        global = false
+
+        [shell.launcher.providers.windows]
+        global = false
+
+    [shell.panel]
+    open_near_click_control_center = true
+    session_placement = "floating"
+    session_position = "center"
+    transparency_mode = "soft"
+
+    [shell.screenshot]
+    annotate = true
+    confirm_region = true
+    copy_to_clipboard = true
+    pipe_command = "swash --stdin --name \"swash-$(date +'%Y-%m-%d_%H:%M:%S').png\""
+    pipe_to_command = false
+    remember_last_region = true
+    save_to_file = false
+    skip_annotate_on_copy_save = true
+
+    [[shell.session.actions]]
+    action = "lock"
+    countdown_seconds = 0.0
+    enabled = true
+    shortcut = "1"
+    variant = "default"
+
+    [[shell.session.actions]]
+    action = "logout"
+    countdown_seconds = 0.0
+    enabled = true
+    shortcut = "2"
+    variant = "default"
+
+    [[shell.session.actions]]
+    action = "lock_and_suspend"
+    countdown_seconds = 3.0
+    enabled = true
+    shortcut = "3"
+    variant = "default"
+
+    [[shell.session.actions]]
+    action = "reboot"
+    countdown_seconds = 3.0
+    enabled = true
+    shortcut = "4"
+    variant = "default"
+
+    [[shell.session.actions]]
+    action = "shutdown"
+    countdown_seconds = 3.0
+    enabled = true
+    shortcut = "5"
+    variant = "destructive"
+
+[system.monitor]
+gpu_poll_seconds = 2
+
+[theme]
+builtin = "Dracula"
+community_palette = "Catppuccin Mocha Blue"
+mode = "dark"
+pure_black_dark = true
+shell_mode = "dark"
+source = "community"
+wallpaper_scheme = "m3-tonal-spot"
+
+    [theme.templates]
+    builtin_ids = [ "alacritty", "btop", "gtk3", "gtk4", "hyprland", "kcolorscheme", "kitty", "qt" ]
+    community_ids = [ "zen-browser", "vscode", "thunar", "glow" ]
+
+[wallpaper]
+directory = "/home/aayush/.config/wallpapers"
+
+    [wallpaper.default]
+    path = "/home/aayush/.config/wallpapers/theme-midnight.jpg"
+
+    [wallpaper.last]
+    path = "/home/aayush/.config/wallpapers/theme-midnight.jpg"
+
+    [wallpaper.monitors.eDP-1]
+    path = "/home/aayush/.config/wallpapers/theme-midnight.jpg"
+
+[widget.clock]
+color = "secondary"
+format = "{:%a %d  •  %I:%M %p}"
+
+[widget.launcher]
+color = "secondary"
+
+[widget.media]
+hide_when_no_media = true
+title_scroll = "on_hover"
+
+[widget.network]
+color = "secondary"
+show_label = false
+
+[widget.notifications]
+color = "secondary"
+
+[widget.session]
+color = "error"
+
+[widget.spacer_1]
+type = "spacer"
+
+[widget.spacer_2]
+type = "spacer"
+
+[widget.sysmon_2]
+glyph = "gpu-usage"
+show_value = false
+stat = "gpu_temp"
+type = "sysmon"
+
+[widget.sysmon_3]
+glyph = "cpu-2"
+stat = "ram_used"
+type = "sysmon"
+visualization = "none"
+
+[widget.temp]
+show_value = true
+stat = "cpu_usage"
+visualization = "none"
+
+[widget.tray]
+capsule = true
+capsule_fill = "on_secondary"
+
+[widget.volume]
+color = "secondary"
+
+[widget.workspaces]
+active_pill_size = 1.8
+anchor = true
+capsule = false
+capsule_fill = "on_primary"
+change_color_on_hover = false
+inactive_pill_size = 1.0
+pill_scale = 1.0
+show_labels = false
+show_tooltip = false

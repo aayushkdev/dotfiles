@@ -7,3 +7,7 @@ require("modules/rules")
 require("modules/hyprlaw")
 require("modules/monitors")
 require("modules/animations")
+
+
+-- For Noctalia Color templates
+require("noctalia").apply_theme()

@@ -17,28 +17,27 @@ hl.config({
     },
 
     decoration = {
-        rounding = 14,
-        rounding_power = 4,
+        rounding = 20,
+        rounding_power = 2,
         active_opacity = 0.95,
         inactive_opacity = 0.95,
         border_part_of_window = false,
         dim_special = 0.2,
 
         shadow = {
-            enabled = false,
-            range = 30,
-            render_power = 20,
-            color = "rgba(09090940)",
-            offset = "0 0",
+            enabled = true,
+            range = 4,
+            render_power = 3,
+            color = 0xee1a1a1a,
         },
 
         blur = {
             enabled = true,
-            size = 4,
+            xray = true,
+            size = 3,
             passes = 2,
-            vibrancy = 2,
-            vibrancy_darkness = 0.2,
-            popups = false,
+            vibrancy = 0.1696,
+            popups = true,
             special = false,
             ignore_opacity = true,
             new_optimizations = true,
@@ -51,15 +50,12 @@ hl.config({
 })
 
 hl.layer_rule({
-    name = "modules",
-    match = { namespace = "qs_modules" },
-    blur = false,
-    ignore_alpha = 0.5,
-})
-
-hl.layer_rule({
-    name = "power",
-    match = { namespace = "qs_powerOverlay" },
+    name = "noctalia",
+    match = {
+        namespace = "^noctalia-(bar-.+|notification|dock|panel|attached-panel|osd|window-switcher)$",
+    },
     blur = true,
+    blur_popups = true,
+    ignore_alpha = 0.5,
     no_anim = true,
 })

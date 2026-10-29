@@ -5,11 +5,7 @@ playerctl
 libnotify
 
 hyprland
-hypridle
-hyprlock
-hyprpolkitagent
-hyprsession
-hyprsunset
+noctalia
 hyprland-preview-share-picker-git
 uwsm
 qt6-wayland
@@ -20,28 +16,23 @@ xdg-user-dirs
 xdg-utils
 xorg-xrdb
 wl-clipboard
-
 quickshell
 upower
-hyprpanel
-awww
-satty
-grim
 wf-recorder
 imagemagick
-matugen
-python-pywal16
-cliphist
+swash
 dgop
 
 kitty
 fish
-starship
 fastfetch
+micro
+glow
 
 thunar
 thunar-archive-plugin
 tumbler
+gvfs
 yazi
 rsync
 stow
@@ -51,8 +42,7 @@ firefox
 chromium
 zen-browser-bin
 code
-kwrite
-nmsurf
+kate
 slack-desktop
 
 eza
@@ -74,10 +64,11 @@ zip
 unrar
 xarchiver
 
+ffmpeg
 vlc
 vlc-plugin-ffmpeg
+vlc-plugin-freetype
 obs-studio
-cava
 mirage
 perl-image-exiftool
 python
@@ -96,8 +87,10 @@ ttf-hack-nerd
 networkmanager
 bluez
 bluez-utils
+blueman
 gnome-keyring
 python-dbus
 python-gobject
 wtype
 kdialog
+power-profiles-daemon
